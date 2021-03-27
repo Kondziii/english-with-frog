@@ -1,0 +1,46 @@
+video {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+
+  top: 50%;
+  left: 50%;
+
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+@media (max-width: 1024px) and (orientation: landscape) {
+  video {
+    transform: translate(-44%, -50%);
+    -webkit-transform: translate(-44%, -50%);
+    -moz-transform: translate(-44%, -50%);
+    -ms-transform: translate(-44%, -50%);
+  }
+}
+
+@media (max-width: 830px) and (orientation: landscape) and (max-height: 420px) {
+  video {
+    transform: translate(-44%, -35%);
+    -webkit-transform: translate(-44%, -35%);
+    -moz-transform: translate(-44%, -35%);
+    -ms-transform: translate(-44%, -35%);
+  }
+}
+
+@media (max-width: 768px) and (orientation: landscape) {
+  video {
+    transform: translate(-48%, -35%);
+    -webkit-transform: translate(-48%, -35%);
+    -moz-transform: translate(-48%, -35%);
+    -ms-transform: translate(-48%, -35%);
+  }
+}
