@@ -20,6 +20,7 @@ const Register = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
+  const [nickname, setNickname] = useState('');
   const [email, setEmail] = useState('');
   const [emailExists, setEmailExists] = useState(false);
   const [emailError, setEmailError] = useState(false);
@@ -34,7 +35,9 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState(false);
   const passwordValidate = (value) => {
-    const isError = value.length < '6';
+    const isError = !value.match(
+      /^(?:(?:(?=.*?[0-9])(?=.*?[-!@#$%&*ˆ+=_])|(?:(?=.*?[0-9])|(?=.*?[A-Z])|(?=.*?[-!@#$%&*ˆ+=_])))|(?=.*?[a-z])(?=.*?[0-9])(?=.*?[-!@#$%&*ˆ+=_]))[A-Za-z0-9-!@#$%&*ˆ+=_]{6,}$/
+    );
     setPasswordError(isError);
     return isError;
   };
@@ -59,23 +62,19 @@ const Register = () => {
       auth
         .createUserWithEmailAndPassword(email, password)
         .then((userAuth) => {
-          userAuth.user.updateProfile({
-            admin: false,
-          });
-          return userAuth;
-        })
-        .then((userAuth) => {
-          dispatch(
-            login({
-              email: userAuth.user.email,
-              admin: false,
-              uid: userAuth.user.uid,
+          userAuth.user
+            .updateProfile({
+              displayName: nickname,
             })
-          );
-          return userAuth.user.uid;
-        })
-        .then((id) => {
-          saveUser(id);
+            .then(() => {
+              dispatch(
+                login({
+                  email: userAuth.user.email,
+                  uid: userAuth.user.uid,
+                  displayName: nickname,
+                })
+              );
+            });
         })
         .catch((err) => {
           if (err) {
@@ -83,10 +82,6 @@ const Register = () => {
           }
         });
     }
-  };
-
-  const saveUser = (uid) => {
-    localStorage.setItem('userId', uid);
   };
 
   return (
@@ -107,7 +102,7 @@ const Register = () => {
               <SupervisedUserCircleIcon />
             </Avatar>
             <Typography variant='h4'>Zarejestruj się</Typography>
-            <form noValidate className={classes.formStyle} onSubmit={register}>
+            <form className={classes.formStyle} onSubmit={register}>
               <TextField
                 variant='outlined'
                 margin='normal'
@@ -117,7 +112,6 @@ const Register = () => {
                 label='Adres email'
                 name='email'
                 autoComplete='email'
-                autoFocus
                 placeholder='Wprowadź maila...'
                 value={email}
                 onChange={(e) => {
@@ -133,7 +127,7 @@ const Register = () => {
                   (emailExists && 'Adres email jest już w użyciu!')
                 }
               />
-              {/* <TextField
+              <TextField
                 variant='outlined'
                 margin='normal'
                 required
@@ -144,7 +138,7 @@ const Register = () => {
                 placeholder='Wprowadź nazwę użytkownika...'
                 value={nickname}
                 onChange={(e) => setNickname(e.target.value)}
-              /> */}
+              />
               <TextField
                 variant='outlined'
                 margin='normal'
@@ -168,7 +162,8 @@ const Register = () => {
                 }}
                 error={passwordError}
                 helperText={
-                  passwordError && 'Hasło musi mieć przynajmniej 6 znaków!'
+                  passwordError &&
+                  'Hasło musi mieć przynajmniej 6 znaków, przynajmniej 1 duzą literę lub cyfrę!'
                 }
                 onBlur={() => {
                   passwordValidate(password);

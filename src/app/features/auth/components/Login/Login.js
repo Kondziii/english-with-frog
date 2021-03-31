@@ -5,17 +5,59 @@ import {
   Avatar,
   Typography,
   TextField,
-  FormControlLabel,
-  Checkbox,
   Button,
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Video from '../../Video';
 import useStyles from '../PanelStyles';
+import { useState } from 'react';
+import { auth } from '../../../../firebase';
+import { login } from '../../userSlice';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const Login = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loginError, setLoginError] = useState(false);
+
+  const logToApp = (e) => {
+    e.preventDefault();
+    setLoginError(false);
+
+    auth
+      .signInWithEmailAndPassword(email, password)
+      .then((userAuth) => {
+        dispatch(
+          login({
+            email: userAuth.user.email,
+            uid: userAuth.user.uid,
+            displayName: userAuth.user.displayName,
+          })
+        );
+        history.push('/');
+      })
+      .catch((err) => {
+        switch (err.code) {
+          case 'auth/too-many-requests':
+            toast.error(
+              'Konto zostało tymczasowo zablkowane ze względu na zbyt dużą liczbę nieudanych prób logowania. ' +
+                'Jeśli koniecznie chcesz się zalogowac to zmień hasło.'
+            );
+            break;
+          case 'auth/wrong-password':
+          case 'auth/user-not-found':
+            setLoginError(true);
+            toast.error('Nieprawidłowy email lub hasło.');
+        }
+      });
+  };
 
   return (
     <div className='loginPanel'>
@@ -35,7 +77,11 @@ const Login = () => {
               <LockOutlinedIcon />
             </Avatar>
             <Typography variant='h4'>Zaloguj się</Typography>
-            <form noValidate className={classes.formStyle}>
+            <form
+              autoComplete='on'
+              className={classes.formStyle}
+              onSubmit={logToApp}
+            >
               <TextField
                 variant='outlined'
                 margin='normal'
@@ -45,8 +91,10 @@ const Login = () => {
                 label='Adres email'
                 name='email'
                 autoComplete='email'
-                autoFocus
                 placeholder='Wprowadź maila...'
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                error={loginError}
               />
               <TextField
                 variant='outlined'
@@ -59,10 +107,9 @@ const Login = () => {
                 id='password'
                 autoComplete='current-password'
                 placeholder='Wprowadź hasło...'
-              />
-              <FormControlLabel
-                control={<Checkbox value='remember' color='primary' />}
-                label='Zapamiętaj mnie'
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                error={loginError}
               />
               <Button
                 type='submit'
