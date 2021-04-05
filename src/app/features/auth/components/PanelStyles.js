@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
   linkStyle: {
     textDecoration: 'none',
     color: 'blue',
+    cursor: 'pointer',
   },
 }));
 

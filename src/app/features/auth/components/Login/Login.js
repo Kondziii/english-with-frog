@@ -17,6 +17,7 @@ import { login } from '../../userSlice';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import ForgotPasswordDialog from '../ForgotPasswordDialog';
 
 const Login = () => {
   const classes = useStyles();
@@ -26,6 +27,7 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const logToApp = (e) => {
     e.preventDefault();
@@ -127,11 +129,13 @@ const Login = () => {
                 alignItems='baseline'
               >
                 <Grid item>
-                  <Typography>
-                    <Link className={classes.linkStyle} to='/'>
-                      Zapomniałeś hasła?
-                    </Link>
+                  <Typography
+                    className={classes.linkStyle}
+                    onClick={() => setOpen(!open)}
+                  >
+                    Zapomniałeś hasła?
                   </Typography>
+                  <ForgotPasswordDialog open={open} setOpen={setOpen} />
                 </Grid>
                 <Grid item>
                   <Typography>
