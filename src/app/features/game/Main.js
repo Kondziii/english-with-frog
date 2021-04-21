@@ -4,12 +4,13 @@ import AppBar from '@material-ui/core/AppBar';
 import Paper from '@material-ui/core/Paper';
 import Toolbar from './Toolbar';
 
-// import Button from '@material-ui/core/Button';
-// import Vocabulary from './Vocabulary';
+
+import Button from '@material-ui/core/Button';
+import Vocabulary from './Vocabulary';
 import React, { Component } from "react";
-// import firebase from '../../firebase';
-// import "firebase/remote-config";
-// import "firebase/database";
+import firebase from '../../firebase';
+import "firebase/remote-config";
+import "firebase/database";
 
 const useStyles = (theme) => ({
   root: {
@@ -30,33 +31,32 @@ class Main extends Component {
     this.state = {
       openVocabulary: false,
       vocabulary: [],
-      words: [],
+
     };
   };
 
-  // componentDidMount = async () => {
-  //   const allvocabulary = await firebase.database().ref("database/vocabulary");
-  //   allvocabulary.on("value", snapshot => {
-  //     let vocabularylist = [];
-  //     snapshot.forEach(snap => {
-  //       vocabularylist.push(snap.val());
-  //     });
-  //     this.setState({ vocabulary: vocabularylist });
-  //   });
-  //   console.log(this.state.vocabulary);
-  // };
+  getData = async () => {
+    const allvocabulary = firebase.database().ref("database/vocabulary");
+    allvocabulary.on("value", snapshot => {
+      let vocabularylist = [];
+      snapshot.forEach(snap => {
+        vocabularylist.push({ key: snap.key, value: snap.val() });
+      });
+      this.setState({ vocabulary: vocabularylist });
+    });
+  } 
 
-  // handleSidebarOpen = () => {
-  //   this.setState({ openVocabulary: true });
-  // };
+  componentDidMount = async () => {
+    await this.getData();
+  };
 
-  // handleSidebarClose = () => {
-  //   this.setState({ openVocabulary: false });
-  // };
+  handleSidebarOpen = () => {
+    this.setState({ openVocabulary: true });
+  };
 
-  selectWords = (c) => {
-
-  }
+  handleSidebarClose = () => {
+    this.setState({ openVocabulary: false });
+  };
 
   render() {
     const { classes } = this.props;
@@ -65,14 +65,20 @@ class Main extends Component {
         <Paper>
           <AppBar position='static'>
             <Toolbar>
+              <Button variant="contained" onClick={this.handleSidebarOpen}>Vocabulary</Button>
+              <Typography variant='h6' className={classes.title}>
+                Logged in
+              </Typography>
+              <UserPanel></UserPanel>
             </Toolbar>
           </AppBar>
         </Paper>
-        {/* <Vocabulary
+        <Vocabulary
         open = {this.state.openVocabulary}
         onOpen = {this.handleSidebarOpen}
         onClose = {this.handleSidebarClose}
-        /> */}
+        allVocabulary = {this.state.vocabulary}
+        />
       </div>
     );
   };
