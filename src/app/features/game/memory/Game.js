@@ -111,7 +111,7 @@ const Game = (props) => {
            cards.push(card);
         }
 
-        if(cards.length==2){ 
+        if(cards.length===2){ 
                 if(cards[0].getAttribute("value") === props.words[cards[1].getAttribute("value")] ||
                 cards[1].getAttribute("value") === props.words[cards[0].getAttribute("value")]) {
                 setPoints(points + 1);

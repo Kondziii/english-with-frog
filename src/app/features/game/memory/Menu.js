@@ -30,24 +30,25 @@ const Menu = (props) => {
 
     const [isLoaded, setIsLoaded] = useState(false);
 
-    const [categories, setCategories] = useState([]);
+    const [sections, setSections] = useState([]);
 
     useEffect(()=> {
-        setCategories(props.categories);
-        if(categories !== []) {
+        setSections(props.sections);
+        if(sections !== []) {
             setIsLoaded(true);
         }
     }, [props])
 
-    const select = (c) => {
-        props.select(c);
+    const select = (s) => {
+        props.select(s);
+        console.log(s);
     }
 
-    const showCategories = () => {
-        return categories.map((c) =>{
+    const showSections = () => {
+        return Object.keys(props.sections).map(s => {
             return(
-                <ListItem className={classes.item} key={c} button>
-                    <ListItemText primary={c} onClick={() => select(c)}/>
+                <ListItem className={classes.item} key={s} button>
+                    <ListItemText primary={props.sections[s]['key']} onClick={() => select(s)}/>
                 </ListItem>
             )        
         })
@@ -62,10 +63,10 @@ const Menu = (props) => {
     return(
         <Box>
             <List className={classes.root}>
-                <Paper className={classes.header}>Wybierz zestaw słówek</Paper>
+                <Paper className={classes.header}>Wybierz Rozdział</Paper>
                 {   
                     isLoaded?
-                    showCategories()
+                    showSections()
                     :
                     loading()
                 }
