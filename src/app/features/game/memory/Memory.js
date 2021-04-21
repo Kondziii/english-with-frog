@@ -6,6 +6,7 @@ import Menu from './Menu'
 import React, { useState, useEffect } from 'react';
 import ToolBar from '../Toolbar';
 import Game from './Game';
+import _ from 'underscore';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,6 +23,7 @@ const Memory = () => {
 
     const [isLoaded, setIsLoaded] = useState(true);
     const [isSelected, setIsSelected] = useState(false);
+    
 
     const tymczasowo = ["animals", "body", "clothes", "colours", "family", "food", "furniture", "job", "school", "shop", "sport", "time", "weather"];
     let words = {
@@ -34,7 +36,8 @@ const Memory = () => {
         carrot: "marchewka",
         cheese: "ser",
    }
-  
+
+    const wordsArray = _.shuffle(_.flatten(_.pairs(words),1));
     let category = null;
 
     const selectCategory = (c) => {
@@ -44,7 +47,7 @@ const Memory = () => {
 
     const showBox = () => {
         if(isSelected) {
-            return(<Game words={words}></Game>)
+            return(<Game words={words} array={wordsArray}></Game>)
         } else {
             if(isLoaded){
                 return(

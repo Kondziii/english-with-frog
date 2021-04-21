@@ -26,7 +26,8 @@ const useStyles = makeStyles((theme) => ({
 
     },
     div : {
-        width: '100%'
+        width: '100%',
+        textAlign: 'center',
     },
     startButton : {
         background: '#4caf50',
@@ -78,15 +79,27 @@ const Game = (props) => {
     let cards = [];
     const [points, setPoints] = useState(0);
     const [isStarted, setIsStarted] = useState(false);
-    let wordsArray = _.shuffle(_.flatten(_.pairs(props.words),1));
+    const [isEnded, setIsEnded] = useState(false);
+    const [counter, setCounter] = useState(0);
+    //const wordsArray = _.shuffle(_.flatten(_.pairs(props.words),1));
 
     const startGame = () => {
         setIsStarted(!isStarted);
     }
 
+    useEffect (() => {
+        if(points >= 8) {
+            setIsEnded(true);
+        }
+    }, [points]) 
+    
+    // useEffect(() => {
+    //     !isEnded && setTimeout(() => setCounter(counter + 1), 1000);
+    //   }, [counter]);
+
     const clickHandler = (event) => {
         let card = event.target;
-        //switchCard(card);
+        console.log(cards.length);
         
         if(cards.length === 0) {
             switchCard(card);
@@ -114,7 +127,6 @@ const Game = (props) => {
             cards.push(card);
         }
          
-
     }
 
     const switchCard = (card) => {
@@ -135,27 +147,33 @@ const Game = (props) => {
                 <Grid container justify="center">  
                     {
                         isStarted ?
-                        <div className={classes.div}>                          
-                            <div className={classes.header}>Zdobyte Punkty: {points}</div>
-                            <div className={classes.playground}>
-                                {
-                                    (
-                                        wordsArray.map((value) => (
-                                        <div key={value} value={value} className={`${classes.card} ${classes.blank}`} 
-                                        onClick={clickHandler} clicked="False" >                                     
-                                            {value} 
-                                        </div>
-                                        
-                                        // <Button  value={value} 
-                                        // className={`${classes.button} ${classes.blank}`} 
-                                        // onClick={clickHandler} clicked="False">                                         
-                                        //      {value} 
-                                        // </Button>
-                                    ))
-                                    )
-                                }
-                            </div>
-                        </div>                       
+                            !isEnded ?
+                            (<div className={classes.div}>                          
+                                <div className={classes.header}>Zdobyte Punkty: {points}</div>
+                                <div className={classes.playground}>
+                                    {
+                                        (
+                                            props.array.map((value) => (
+                                            <div key={value} value={value} className={`${classes.card} ${classes.blank}`} 
+                                            onClick={clickHandler} clicked="False" >                                     
+                                                {value} 
+                                            </div>
+                                            
+                                            // <Button key={value} value={value} 
+                                            // className={`${classes.button} ${classes.blank}`} 
+                                            // onClick={clickHandler} clicked="False">                                         
+                                            //      {value} 
+                                            // </Button>
+                                        ))
+                                        )
+                                    }
+                                </div>
+                            </div>   )  
+                            :
+                            <div className={classes.div} >
+                                <div>Koniec Gry</div>
+                                <div>Twój czas: {counter}</div>
+                            </div>                  
                         :
                         <div className={classes.div}>
                             <Button  className={classes.startButton} onClick={startGame}>START</Button>
