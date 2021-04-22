@@ -1,18 +1,18 @@
-import { withStyles } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import UserPanel from './UserPanel';
 
+import React, { useEffect, useState } from "react";
 import Button from '@material-ui/core/Button';
 import Vocabulary from './Vocabulary';
-import React, { Component } from "react";
 import firebase from '../../firebase';
 import "firebase/remote-config";
 import "firebase/database";
 
-const useStyles = (theme) => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
@@ -22,48 +22,42 @@ const useStyles = (theme) => ({
   title: {
     flexGrow: 1,
   },
-});
+}));
 
-class Main extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      openVocabulary: false,
-      vocabulary: [],
-    };
-  };
+const Main = () => {
+  const classes = useStyles();
+  const [vocabulary, setVocabulary] = useState([]);
+  const [openVocabulary, setOpenVocabulary] = useState(false);
 
-  getData = async () => {
+  const getData = () => {
     const allvocabulary = firebase.database().ref("database/vocabulary");
     allvocabulary.on("value", snapshot => {
       let vocabularylist = [];
       snapshot.forEach(snap => {
         vocabularylist.push({ key: snap.key, value: snap.val() });
       });
-      this.setState({ vocabulary: vocabularylist });
+      setVocabulary(vocabularylist);
     });
   } 
+  
+  useEffect(() => {
+    getData();
+  });
 
-  componentDidMount = async () => {
-    await this.getData();
+  const handleSidebarOpen = () => {
+    setOpenVocabulary(true);
   };
 
-  handleSidebarOpen = () => {
-    this.setState({ openVocabulary: true });
+  const handleSidebarClose = () => {
+    setOpenVocabulary(false);
   };
 
-  handleSidebarClose = () => {
-    this.setState({ openVocabulary: false });
-  };
-
-  render() {
-    const { classes } = this.props;
-    return (
+  return (
       <div className={classes.root}>
         <Paper>
           <AppBar position='static'>
             <Toolbar>
-              <Button variant="contained" onClick={this.handleSidebarOpen}>Vocabulary</Button>
+              <Button variant="contained" onClick={handleSidebarOpen}>Vocabulary</Button>
               <Typography variant='h6' className={classes.title}>
                 Logged in
               </Typography>
@@ -72,14 +66,13 @@ class Main extends Component {
           </AppBar>
         </Paper>
         <Vocabulary
-        open = {this.state.openVocabulary}
-        onOpen = {this.handleSidebarOpen}
-        onClose = {this.handleSidebarClose}
-        allVocabulary = {this.state.vocabulary}
+        open = {openVocabulary}
+        onOpen = {handleSidebarOpen}
+        onClose = {handleSidebarClose}
+        allVocabulary = {vocabulary}
         />
       </div>
     );
-  };
 };
 
-export default withStyles(useStyles)(Main);
+export default Main;
