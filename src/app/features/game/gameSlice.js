@@ -5,10 +5,15 @@ export const gameSlice = createSlice({
   initialState: {
     vocabulary: [],
     isDictOpen: false,
+    view: '',
   },
   reducers: {
     fetchVocabulary: (state, action) => {
       state.vocabulary = action.payload;
+    },
+
+    changeView: (state, action) => {
+      state.view = action.payload;
     },
 
     toggleDict: (state) => {
@@ -18,7 +23,7 @@ export const gameSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { fetchVocabulary, toggleDict } = gameSlice.actions;
+export const { fetchVocabulary, toggleDict, changeView } = gameSlice.actions;
 
 export const selectGame = (state) => state.game;
 

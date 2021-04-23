@@ -1,16 +1,24 @@
 import UserPanel from './UserPanel';
-import Button from '@material-ui/core/Button';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import { useDispatch } from 'react-redux';
+import { Button, AppBar, Toolbar, ButtonGroup} from '@material-ui/core';
 
 const Navigation = (props) => {
   return (
     <AppBar position='static'>
       <Toolbar>
-        <Button variant='contained' onClick={() => props.onDictOpen()}>
-          Vocabulary
-        </Button>
+        <ButtonGroup variant="text" color="default" aria-label="text primary button group">
+          <Button variant='contained' onClick={props.onDictOpen}>
+            Słowniczek
+          </Button>
+          <Button variant='contained' onClick={props.onLearnOpen}>
+            Nauka
+          </Button>   
+          <Button variant='contained'>
+            Sklep
+          </Button>
+          <Button variant='contained'>
+            Inne
+          </Button>      
+        </ButtonGroup>
         <UserPanel></UserPanel>
       </Toolbar>
     </AppBar>

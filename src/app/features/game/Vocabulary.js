@@ -6,24 +6,39 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Paper from '@material-ui/core/Paper';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   fullList: {
-    width: 600
+    [theme.breakpoints.down('sm')]: {
+      width: 300
+    },
+    [theme.breakpoints.up('md')]: {
+      width: 500
+    }
   },
   vocabulary_section_title: {
     backgroundColor: 'lightgreen',
-    paddingLeft: 10,
   },
   vocabulary_section: {
     backgroundColor: 'lightgrey',
-    margin: 10,
+    [theme.breakpoints.down('sm')]: {
+      margin: 5
+    },
+    [theme.breakpoints.up('md')]: {
+      margin: 5,
+    },
+    paddingBottom: 8,
   },
   word: {
-    paddingLeft: 30,
     paddingTop: 6,
+    paddingLeft: 22,
   },
   button: {
-    width: 580
+    [theme.breakpoints.down('sm')]: {
+      width: 290
+    },
+    [theme.breakpoints.up('md')]: {
+      width: 490
+    }
   }
 }));
 
@@ -44,7 +59,8 @@ const Vocabulary = (p) => {
               <div key={key}>
                 <Paper className={classes.vocabulary_section}>
                   <Paper className={classes.vocabulary_section_title}>
-                    <Button className={classes.button} onClick={
+                    <Button className={classes.button} 
+                    onClick={
                       openVocabulary.includes(key) ?
                       () => setOpenVocabulary(openVocabulary.filter(
                         item => item !== key
