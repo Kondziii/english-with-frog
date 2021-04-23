@@ -5,6 +5,7 @@ import Vocabulary from './Vocabulary';
 import { database } from '../../firebase';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeView, fetchVocabulary, selectGame, toggleDict } from './gameSlice';
+// import { selectUser, fetchChapterPoints, selectUserData } from '../auth/userSlice';
 import Navigation from './Navigation';
 import Learn from './Learn';
 
@@ -33,23 +34,45 @@ const Main = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const game = useSelector(selectGame);
+  const user = useSelector(selectUserData);
 
-  const [vocabulary, setVocabulary] = useState([]);
-
-  const getData = async () => {
-    const allvocabulary = database.ref('database/vocabulary');
-    allvocabulary.on('value', (snapshot) => {
-      let vocabularylist = [];
-      snapshot.forEach((snap) => {
-        vocabularylist.push({ key: snap.key, value: snap.val() });
-      });
-      setVocabulary(vocabularylist);
-    });
+  const getData2 = async () => {
+    return database.ref('database/vocabulary')
   };
+  
+  // const createUserData = () => {
+  // var chapters = [];
+  // game.vocabulary.map(key => {
+  //   chapters.push({key:key, value:0});
+  // });
+  // database.ref('database/game/'+user.user.uid).set({chapters});
+  // console.log(chapters);
+  // };
+
+  // const getChapterPoints = async () => {
+  //   const allusers = database.ref('database/game');
+  //   allusers.on('value', (snapshot) => {
+  //     let userslist = [];
+  //     snapshot.forEach((snap) => {
+  //       userslist.push( {key:snap.key, value:snap.key} );
+  //     });
+     
+  //     if (!userslist.includes(user.user.uid)) {
+  //       createUserData();
+  //       console.log('xxxx');
+  //     }
+  //   });
+  // };
 
   useEffect(() => {
-    getData().then(() => {
-      dispatch(fetchVocabulary(vocabulary));
+    getData2().then((allvocabulary) => {
+      allvocabulary.on('value', (snapshot) => {
+        let vocabularylist = [];
+        snapshot.forEach((snap) => {
+          vocabularylist.push({ key: snap.key, value: snap.val() });
+        });
+        dispatch(fetchVocabulary(vocabularylist));
+      });
     });
   }, []);
 
