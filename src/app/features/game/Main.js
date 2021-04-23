@@ -51,7 +51,6 @@ const Main = (props) => {
     getData().then(() => {
       dispatch(fetchVocabulary(vocabulary));
     });
-    console.log(game.vocabulary);
   }, []);
 
   const toggleSideBarHandler = () => {

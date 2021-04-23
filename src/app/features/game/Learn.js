@@ -72,9 +72,9 @@ const Learn = (props) => {
                 cellHeight={getCellHeight()} 
                 cols={1} 
                 className={classes.gridList}>
-                    <GridList cellHeight={30} cols={getGridListCols()} container>
+                    <GridList cellHeight={30} cols={getGridListCols()}>
                         {Object.keys(game.vocabulary).map(key => (
-                            <Grid>
+                            <Grid key={key}>
                                 <FormControlLabel value={key} control={<Radio color="primary"/>} label={game.vocabulary[key]['key']} />
                             </Grid>
                         ))}
