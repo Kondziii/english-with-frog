@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
 
   containerStyle: {
     minHeight: '87vh',
+    position: 'relative',
   },
 }));
 
