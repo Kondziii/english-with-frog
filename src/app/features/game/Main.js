@@ -36,7 +36,7 @@ const Main = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const game = useSelector(selectGame);
-  const user = useSelector(selectUserData);
+  //const user = useSelector(selectUserData);
 
   const getData2 = async () => {
     return database.ref('database/vocabulary')
