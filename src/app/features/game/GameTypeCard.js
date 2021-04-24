@@ -63,7 +63,12 @@ const GameTypeCard = (props) => {
       </CardContent>
 
       <CardActions>
-        <Button size='small' color='primary' className={classes.btnStyle}>
+        <Button
+          size='small'
+          color='primary'
+          className={classes.btnStyle}
+          onClick={() => props.onStart()}
+        >
           {props.btnLabel}
         </Button>
       </CardActions>

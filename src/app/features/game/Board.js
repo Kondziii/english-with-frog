@@ -2,17 +2,23 @@ import { Grid, Typography } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import Learn from './Learn';
 import { makeStyles } from '@material-ui/core/styles';
+import FlashCards from './FlashCards';
+import GameContainer from './GameContainer';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    margin: '3vh 0',
+    padding: '2vh 0',
+  },
+
+  containerStyle: {
+    minHeight: '87vh',
   },
 }));
 
-const Board = () => {
+const Board = (props) => {
   const classes = useStyles();
 
   return (
@@ -23,15 +29,18 @@ const Board = () => {
         justify='space-evenly'
         className={classes.gridContainer}
       >
-        <Grid item xs={12} md={7} className={classes.gridItem}>
-          <Paper elevation={3} className={classes.paperStyle}>
-            <Learn />
-          </Paper>
-        </Grid>
+        <GameContainer className={classes.containerStyle}>
+          {!props.game.isFlashCardsOpen && <Learn />}
+          {props.game.isFlashCardsOpen && (
+            <FlashCards
+              items={props.game.vocabulary[props.game.selectedChapterIndex]}
+            />
+          )}
+        </GameContainer>
         <Grid elevation={3} item xs={12} md={4}>
-          <Paper>
+          {/* <Paper>
             <Typography variant='h2'> Zaba here</Typography>
-          </Paper>
+          </Paper> */}
         </Grid>
       </Grid>
     </div>

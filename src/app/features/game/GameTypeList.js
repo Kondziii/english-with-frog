@@ -1,6 +1,11 @@
 import { Grid } from '@material-ui/core';
 import GameTypeCard from './GameTypeCard';
 import { makeStyles } from '@material-ui/core/styles';
+import { useDispatch } from 'react-redux';
+import { openFlashCards } from './gameSlice';
+import { useSelector } from 'react-redux';
+import { selectGame } from './gameSlice';
+import { toast } from 'react-toastify';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,18 +41,48 @@ const LEARN_TYPES = [
 
 const GameTypeList = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const game = useSelector(selectGame);
+
+  const flashCardsHandler = () => {
+    if (game.selectedChapterIndex === '') {
+      toast.error('Nie wybrałeś działu.');
+    } else {
+      dispatch(openFlashCards());
+    }
+  };
 
   return (
     <Grid container direction='row' className={classes.root}>
-      {LEARN_TYPES.map((learnType) => (
-        <Grid item xs={12} md={4} sm={6} lg={3}>
-          <GameTypeCard
-            title={learnType.title}
-            description={learnType.description}
-            btnLabel={learnType.btnLabel}
-          />
-        </Grid>
-      ))}
+      <Grid item xs={12} sm={6} lg={3}>
+        <GameTypeCard
+          title={LEARN_TYPES[0].title}
+          description={LEARN_TYPES[0].description}
+          btnLabel={LEARN_TYPES[0].btnLabel}
+          onStart={flashCardsHandler}
+        />
+      </Grid>
+      <Grid item xs={12} sm={6} lg={3}>
+        <GameTypeCard
+          title={LEARN_TYPES[1].title}
+          description={LEARN_TYPES[1].description}
+          btnLabel={LEARN_TYPES[1].btnLabel}
+        />
+      </Grid>
+      <Grid item xs={12} sm={6} lg={3}>
+        <GameTypeCard
+          title={LEARN_TYPES[2].title}
+          description={LEARN_TYPES[2].description}
+          btnLabel={LEARN_TYPES[2].btnLabel}
+        />
+      </Grid>
+      <Grid item xs={12} sm={6} lg={3}>
+        <GameTypeCard
+          title={LEARN_TYPES[3].title}
+          description={LEARN_TYPES[3].description}
+          btnLabel={LEARN_TYPES[3].btnLabel}
+        />
+      </Grid>
     </Grid>
   );
 };

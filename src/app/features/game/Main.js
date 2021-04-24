@@ -11,7 +11,6 @@ import Board from './Board';
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    height: '100%',
     minHeight: '100vh',
     width: '100%',
     background: '#eee',
@@ -23,15 +22,6 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
-  grid_paper: {
-    height: '87vh',
-    marginTop: '4vh',
-    backgroundColor: 'rgb(230,230,230)',
-  },
-  zaba: {
-    textAlign: 'center',
-    paddingTop: '30vh',
-  },
 }));
 
 const Main = (props) => {
@@ -39,12 +29,12 @@ const Main = (props) => {
   const dispatch = useDispatch();
   const game = useSelector(selectGame);
 
-  const getData2 = async () => {
+  const getRef = async () => {
     return database.ref('database/vocabulary');
   };
 
   useEffect(() => {
-    getData2().then((allvocabulary) => {
+    getRef().then((allvocabulary) => {
       allvocabulary.on('value', (snapshot) => {
         let vocabularylist = [];
         snapshot.forEach((snap) => {
@@ -70,7 +60,7 @@ const Main = (props) => {
         onClose={toggleSideBarHandler}
         allVocabulary={game.vocabulary}
       />
-      <Board />
+      <Board game={game} />
     </div>
   );
 };

@@ -8,15 +8,15 @@ import {
   Radio,
 } from '@material-ui/core';
 import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
-import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { selectChapter } from './gameSlice';
 import { selectGame } from './gameSlice';
 import GameTypeList from './GameTypeList';
 import GameBoardTitle from './GameBoardTitle';
 
 const useStyles = makeStyles(() => ({
   root: {
-    minHeight: '85vh',
+    // minHeight: '85vh',
   },
 
   gridList: {
@@ -51,7 +51,6 @@ const Learn = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const game = useSelector(selectGame);
-  const [value, setValue] = React.useState('0');
 
   const getGridListCols = () => {
     if (isWidthUp('xl', props.width)) {
@@ -85,6 +84,10 @@ const Learn = (props) => {
     return 150;
   };
 
+  const chapterChangeHandler = (e) => {
+    dispatch(selectChapter(e.target.value));
+  };
+
   return (
     <FormControl className={classes.root}>
       <RadioGroup>
@@ -100,14 +103,14 @@ const Learn = (props) => {
               <Grid key={key}>
                 <FormControlLabel
                   value={key}
+                  onChange={chapterChangeHandler}
                   control={<Radio color='primary' />}
-                  label={game.vocabulary[key]['key']}
+                  label={game.vocabulary[key].key}
                 />
               </Grid>
             ))}
           </GridList>
         </GridList>
-
         <GameBoardTitle title='tryby nauki' />
         <GameTypeList />
       </RadioGroup>
