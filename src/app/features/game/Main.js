@@ -1,19 +1,16 @@
-import { withStyles } from '@material-ui/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Paper from '@material-ui/core/Paper';
-import UserPanel from './UserPanel'
-import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button';
-import Vocabulary from './Vocabulary';
-import React, { Component } from "react";
-import firebase from '../../firebase';
-import "firebase/remote-config";
-import "firebase/database";
-import Memory from './memory/Memory';
-import Menu from './memory/Menu';
 
-const useStyles = (theme) => ({
+import { makeStyles } from '@material-ui/core/styles';
+import { Paper, Grid } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import Vocabulary from './Vocabulary';
+import { database } from '../../firebase';
+import { useDispatch, useSelector } from 'react-redux';
+import { changeView, fetchVocabulary, selectGame, toggleDict } from './gameSlice';
+// import { selectUser, fetchChapterPoints, selectUserData } from '../auth/userSlice';
+import Navigation from './Navigation';
+import Learn from './Learn';
+
+const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     height: '100%'
@@ -24,80 +21,111 @@ const useStyles = (theme) => ({
   title: {
     flexGrow: 1,
   },
-});
+  grid_paper: {
+    height: '87vh',
+    marginTop: '4vh',
+    backgroundColor: 'rgb(230,230,230)'
+  },
+  zaba: {
+    textAlign: 'center',
+    paddingTop: '30vh',
+  },
+}));
 
-class Main extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      openVocabulary: false,
-      vocabulary: [],
-      isSelected: false,
-      section: null,
-    };
+const Main = (props) => {
+  const classes = useStyles();
+  const dispatch = useDispatch();
+  const game = useSelector(selectGame);
+  const user = useSelector(selectUserData);
+
+  const getData2 = async () => {
+    return database.ref('database/vocabulary')
   };
-
-  getData = async () => {
-    const allvocabulary = firebase.database().ref("database/vocabulary");
-    allvocabulary.on("value", snapshot => {
-      let vocabularylist = [];
-      snapshot.forEach(snap => {
-        vocabularylist.push({ key: snap.key, value: snap.val() });
-      });
-      this.setState({ vocabulary: vocabularylist });
-    });
-  } 
-
-  componentDidMount = async () => {
-    await this.getData();
-  };
-
-  handleSidebarOpen = () => {
-    this.setState({ openVocabulary: true });
-  };
-
-  handleSidebarClose = () => {
-    this.setState({ openVocabulary: false });
-  };
-
-  selectSection = (s) => {
-    this.setState({section : s});
-    this.setState({isSelected : true});
-    console.log(this.state.section);
-  }
   
+  // const createUserData = () => {
+  // var chapters = [];
+  // game.vocabulary.map(key => {
+  //   chapters.push({key:key, value:0});
+  // });
+  // database.ref('database/game/'+user.user.uid).set({chapters});
+  // console.log(chapters);
+  // };
 
-  render() {
-    const { classes } = this.props;
-    return (
-      <div className={classes.root}>
-        <Paper>
-          <AppBar position='static'>
-            <Toolbar>
-              <Button variant="contained" onClick={this.handleSidebarOpen}>Vocabulary</Button>
-              <Typography variant='h6' className={classes.title}>
-                Logged in
-              </Typography>
-              <UserPanel></UserPanel>
-            </Toolbar>
-          </AppBar>
-        </Paper>
-        <Vocabulary
-        open = {this.state.openVocabulary}
-        onOpen = {this.handleSidebarOpen}
-        onClose = {this.handleSidebarClose}
-        allVocabulary = {this.state.vocabulary}
-        />
-        {
-          this.state.isSelected ?
-          <Memory section={this.state.section}></Memory>
-          :
-          <Menu sections={this.state.vocabulary} select={() => this.selectSection()}/>
-        }
-        
-      </div>
-    );
+  // const getChapterPoints = async () => {
+  //   const allusers = database.ref('database/game');
+  //   allusers.on('value', (snapshot) => {
+  //     let userslist = [];
+  //     snapshot.forEach((snap) => {
+  //       userslist.push( {key:snap.key, value:snap.key} );
+  //     });
+     
+  //     if (!userslist.includes(user.user.uid)) {
+  //       createUserData();
+  //       console.log('xxxx');
+  //     }
+  //   });
+  // };
+
+  useEffect(() => {
+    getData2().then((allvocabulary) => {
+      allvocabulary.on('value', (snapshot) => {
+        let vocabularylist = [];
+        snapshot.forEach((snap) => {
+          vocabularylist.push({ key: snap.key, value: snap.val() });
+        });
+        dispatch(fetchVocabulary(vocabularylist));
+      });
+    });
+  }, []);
+
+  const toggleSideBarHandler = () => {
+    dispatch(toggleDict());
   };
+  const openLearnView = () => {
+    dispatch(changeView('learn'));
+  };
+  const openTestView = () => {
+    dispatch(changeView('test'));
+  };
+
+  return (
+    <div className={classes.root}>
+      <Paper>
+        <Navigation 
+        onDictOpen={toggleSideBarHandler}
+        onLearnOpen={openLearnView}
+        oneTestOpen={openTestView}
+        />
+      </Paper>
+      <Vocabulary
+        open={game.isDictOpen}
+        onOpen={toggleSideBarHandler}
+        onClose={toggleSideBarHandler}
+        allVocabulary={game.vocabulary}
+      />
+      <Grid
+        container
+        direction="row"
+        justify="space-evenly"
+        alignItems="center"
+      >
+        <Grid item xs={11} md={7}>
+          <Paper className={classes.grid_paper}>
+            {game.view === 'learn' ?
+            <Learn></Learn>
+            :
+            ''}
+          </Paper>
+        </Grid>
+        <Grid item xs={11} md={4}>
+          <Paper className={classes.grid_paper}>
+            <h1 className={classes.zaba}>Tu będzie żaba</h1>
+          </Paper>
+        </Grid>
+      </Grid>
+    </div>
+  );
+
 };
 
-export default withStyles(useStyles)(Main);
+export default Main;

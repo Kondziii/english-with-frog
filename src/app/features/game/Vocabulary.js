@@ -1,85 +1,81 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
-import { Button, withStyles } from "@material-ui/core";
+import { Button, makeStyles } from "@material-ui/core";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Paper from '@material-ui/core/Paper';
 
-const styles = {
+const useStyles = makeStyles((theme) => ({
   fullList: {
-    width: 600
+    [theme.breakpoints.down('sm')]: {
+      width: 300
+    },
+    [theme.breakpoints.up('md')]: {
+      width: 500
+    }
   },
   vocabulary_section_title: {
     backgroundColor: 'lightgreen',
-    paddingLeft: 10,
   },
   vocabulary_section: {
     backgroundColor: 'lightgrey',
-    margin: 10,
+    [theme.breakpoints.down('sm')]: {
+      margin: 5
+    },
+    [theme.breakpoints.up('md')]: {
+      margin: 5,
+    },
+    paddingBottom: 8,
   },
   word: {
-    paddingLeft: 30,
     paddingTop: 6,
+    paddingLeft: 22,
   },
   button: {
-    width: 580
-  }
-};
-
-class Vocabulary extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      openSidebar: false,
-      openVocabulary: [],
-    };
-  }
-
-  showDrawer = event => {
-    if (
-      event &&
-      event.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    ) {
-      return;
+    [theme.breakpoints.down('sm')]: {
+      width: 290
+    },
+    [theme.breakpoints.up('md')]: {
+      width: 490
     }
+  }
+}));
 
-    this.setState({ openSidebar: true });
-  };
+const Vocabulary = (p) => {
+  const classes = useStyles();
+  const [openVocabulary, setOpenVocabulary] = useState([]);
 
-  fullList = () => {
-    const { classes, onClose, allVocabulary } = this.props;
-
+  const fullList = () => {
     return (
       <div
         className={classes.fullList}
         role="presentation"
-        onKeyDown={onClose}
+        onKeyDown={p.onClose}
       >
         <List>
           {
-            Object.keys(allVocabulary).map(key => (
+            Object.keys(p.allVocabulary).map(key => (
               <div key={key}>
                 <Paper className={classes.vocabulary_section}>
                   <Paper className={classes.vocabulary_section_title}>
-                    <Button className={classes.button} onClick={
-                      this.state.openVocabulary.includes(key) ?
-                      () => this.setState({openVocabulary: this.state.openVocabulary.filter(
+                    <Button className={classes.button} 
+                    onClick={
+                      openVocabulary.includes(key) ?
+                      () => setOpenVocabulary(openVocabulary.filter(
                         item => item !== key
-                      )}):
-                      () => this.setState({openVocabulary: this.state.openVocabulary.concat([key])})}>
+                      )):
+                      () => setOpenVocabulary(openVocabulary.concat([key]))}>
                       <ListItem>
-                        <ListItemText primary={allVocabulary[key]['key']}/>
+                        <ListItemText primary={p.allVocabulary[key]['key']}/>
                       </ListItem>
                     </Button>
                   </Paper>
                   {
-                    this.state.openVocabulary.includes(key) ? 
-                    Object.keys(allVocabulary[key]['value']).map(key2 => (
+                    openVocabulary.includes(key) ? 
+                    Object.keys(p.allVocabulary[key]['value']).map(key2 => (
                       // <ListItem>
-                        <ListItemText key={key2} className={classes.word} primary={key2 + ' - ' + allVocabulary[key]['value'][key2]}/>
+                        <ListItemText key={key2} className={classes.word} primary={key2 + ' - ' + p.allVocabulary[key]['value'][key2]}/>
                       // </ListItem>
                     )) : ''
                   }
@@ -93,23 +89,19 @@ class Vocabulary extends Component {
     );
   };
 
-  render() {
-    const { open, onOpen, onClose } = this.props;
+  const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
 
-    const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
+  return (
+    <SwipeableDrawer
+      open={p.open}
+      onOpen={p.onOpen}
+      onClose={p.onClose}
+      disableBackdropTransition={!iOS}
+      disableDiscovery={iOS}
+    >
+      {fullList()}
+    </SwipeableDrawer>
+  );
+};
 
-    return (
-      <SwipeableDrawer
-        open={open}
-        onOpen={onOpen}
-        onClose={onClose}
-        disableBackdropTransition={!iOS}
-        disableDiscovery={iOS}
-      >
-        {this.fullList()}
-      </SwipeableDrawer>
-    );
-  }
-}
-
-export default withStyles(styles)(Vocabulary);
+export default Vocabulary;
