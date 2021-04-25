@@ -8,6 +8,7 @@ export const gameSlice = createSlice({
     isFlashCardsOpen: false,
     selectedChapterIndex: '',
     chapterWords: [],
+    currentFlashCard: 0,
   },
   reducers: {
     fetchVocabulary: (state, action) => {
@@ -29,6 +30,10 @@ export const gameSlice = createSlice({
     getChapterWords: (state, action) => {
       state.chapterWords = action.payload;
     },
+
+    getCurrentFlashCard: (state, action) => {
+      state.currentFlashCard = action.payload;
+    },
   },
 });
 
@@ -39,6 +44,7 @@ export const {
   openFlashCards,
   selectChapter,
   getChapterWords,
+  getCurrentFlashCard,
 } = gameSlice.actions;
 
 export const selectGame = (state) => state.game;
