@@ -7,15 +7,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchVocabulary, selectGame, toggleDict } from './gameSlice';
 import Navigation from './Navigation';
 import Board from './Board';
+import Learn from './Learn';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    minHeight: '100vh',
-    width: '100%',
-    background: '#eee',
-  },
-
   menuButton: {
     marginRight: theme.spacing(2),
   },
@@ -45,23 +39,18 @@ const Main = (props) => {
     });
   }, []);
 
-  const toggleSideBarHandler = () => {
-    dispatch(toggleDict());
-  };
-
   return (
-    <div className={classes.root}>
-      <Paper>
-        <Navigation onDictOpen={toggleSideBarHandler} />
-      </Paper>
+    <>
       <Vocabulary
         open={game.isDictOpen}
-        onOpen={toggleSideBarHandler}
-        onClose={toggleSideBarHandler}
+        onOpen={props.onDictOpen}
+        onClose={props.onDictOpen}
         allVocabulary={game.vocabulary}
       />
-      <Board game={game} />
-    </div>
+      <Board game={game}>
+        <Learn />
+      </Board>
+    </>
   );
 };
 

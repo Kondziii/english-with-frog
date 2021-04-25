@@ -1,8 +1,4 @@
-import { Grid, Typography } from '@material-ui/core';
-import Paper from '@material-ui/core/Paper';
-import Learn from './Learn';
 import { makeStyles } from '@material-ui/core/styles';
-import FlashCards from './FlashCards';
 import GameContainer from './GameContainer';
 
 const useStyles = makeStyles((theme) => ({
@@ -24,26 +20,9 @@ const Board = (props) => {
 
   return (
     <div className={classes.root}>
-      <Grid
-        container
-        direction='row'
-        justify='space-evenly'
-        className={classes.gridContainer}
-      >
-        <GameContainer className={classes.containerStyle}>
-          {!props.game.isFlashCardsOpen && <Learn />}
-          {props.game.isFlashCardsOpen && (
-            <FlashCards
-              items={props.game.vocabulary[props.game.selectedChapterIndex]}
-            />
-          )}
-        </GameContainer>
-        <Grid elevation={3} item xs={12} md={4}>
-          <Paper>
-            <Typography variant='h2'> Zaba here</Typography>
-          </Paper>
-        </Grid>
-      </Grid>
+      <GameContainer className={classes.containerStyle}>
+        {props.children}
+      </GameContainer>
     </div>
   );
 };

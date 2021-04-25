@@ -6,6 +6,7 @@ import { openFlashCards } from './gameSlice';
 import { useSelector } from 'react-redux';
 import { selectGame } from './gameSlice';
 import { toast } from 'react-toastify';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,6 +42,7 @@ const LEARN_TYPES = [
 
 const GameTypeList = () => {
   const classes = useStyles();
+  const history = useHistory();
   const dispatch = useDispatch();
   const game = useSelector(selectGame);
 
@@ -49,6 +51,7 @@ const GameTypeList = () => {
       toast.error('Nie wybrałeś działu.');
     } else {
       dispatch(openFlashCards());
+      history.push('/flashcards');
     }
   };
 

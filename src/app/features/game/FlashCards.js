@@ -78,7 +78,7 @@ const useStyles = makeStyles((theme) => ({
     background: 'green',
     color: 'white',
     fontSize: '1rem',
-    // margin: theme.spacing(2),
+    margin: theme.spacing(2),
   },
 }));
 
