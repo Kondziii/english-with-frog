@@ -39,9 +39,9 @@ const Board = (props) => {
           )}
         </GameContainer>
         <Grid elevation={3} item xs={12} md={4}>
-          {/* <Paper>
+          <Paper>
             <Typography variant='h2'> Zaba here</Typography>
-          </Paper> */}
+          </Paper>
         </Grid>
       </Grid>
     </div>

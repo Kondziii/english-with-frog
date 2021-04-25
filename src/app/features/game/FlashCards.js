@@ -79,6 +79,7 @@ const useStyles = makeStyles((theme) => ({
     background: 'green',
     color: 'white',
     fontSize: '1rem',
+    margin: theme.spacing(2),
   },
 }));
 
@@ -131,7 +132,6 @@ const FlashCards = (props) => {
         direction='column'
         justify='flex-start'
         alignItems='stretch'
-        spacing={3}
       >
         <Grid item>
           <Typography className={classes.header} variant='h4'>
