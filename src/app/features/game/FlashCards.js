@@ -22,7 +22,6 @@ const useStyles = makeStyles((theme) => ({
   root: {
     height: '87vh',
     width: '100%',
-    marginTop: '1vh',
     position: 'relative',
   },
 
@@ -79,7 +78,7 @@ const useStyles = makeStyles((theme) => ({
     background: 'green',
     color: 'white',
     fontSize: '1rem',
-    margin: theme.spacing(2),
+    // margin: theme.spacing(2),
   },
 }));
 
