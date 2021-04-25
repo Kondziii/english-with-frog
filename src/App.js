@@ -21,7 +21,7 @@ import { selectGame } from './app/features/game/gameSlice';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    maxHeight: '100vh',
+    minHeight: '100vh',
     width: '100%',
     background: '#eee',
   },
@@ -41,7 +41,7 @@ function App() {
   const dispatch = useDispatch();
   const classes = useStyles();
 
-  useEffect(() => {
+  const isLogged = async () => {
     auth.onAuthStateChanged((userAuth) => {
       if (userAuth) {
         if (userAuth.displayName) {
@@ -57,6 +57,10 @@ function App() {
         dispatch(logout());
       }
     });
+  };
+
+  useEffect(() => {
+    isLogged();
   }, [dispatch]);
 
   const toggleSideBarHandler = () => {
