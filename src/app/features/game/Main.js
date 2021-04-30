@@ -1,3 +1,4 @@
+
 import { makeStyles } from '@material-ui/core/styles';
 import { Paper, Grid } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
@@ -12,6 +13,7 @@ import Learn from './Learn';
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    height: '100%'
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -34,7 +36,7 @@ const Main = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const game = useSelector(selectGame);
-  const user = useSelector(selectUserData);
+  //const user = useSelector(selectUserData);
 
   const getData2 = async () => {
     return database.ref('database/vocabulary')
@@ -123,6 +125,7 @@ const Main = (props) => {
       </Grid>
     </div>
   );
+
 };
 
 export default Main;

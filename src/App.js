@@ -12,6 +12,7 @@ import { useEffect } from 'react';
 import Main from './app/features/game/Main';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Memory from './app/features/game/memory/Memory'
 
 let theme = createMuiTheme({
   palette: {
@@ -59,6 +60,9 @@ function App() {
         <Switch>
           <Route exact path='/'>
             <Main />
+          </Route>
+          <Route exact path='/memory'>
+            <Memory />
           </Route>
           <Redirect to='/' />
         </Switch>

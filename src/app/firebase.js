@@ -1,8 +1,10 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
+
 import 'firebase/remote-config';
 import 'firebase/database';
+
 
 const firebaseConfig = {
   apiKey: 'AIzaSyC0ZMmF_9E_FC6_fdPLxLMlzHp-al2yiwQ',
