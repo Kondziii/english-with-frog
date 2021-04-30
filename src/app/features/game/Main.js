@@ -1,3 +1,4 @@
+
 import { makeStyles } from '@material-ui/core/styles';
 import { Paper } from '@material-ui/core';
 import React, { useEffect } from 'react';
@@ -10,6 +11,13 @@ import Board from './Board';
 import Learn from './Learn';
 
 const useStyles = makeStyles((theme) => ({
+// <<<<<<< memory
+//   root: {
+//     flexGrow: 1,
+//     height: '100%'
+//   },
+// =======
+// >>>>>>> flashcards
   menuButton: {
     marginRight: theme.spacing(2),
   },
@@ -22,6 +30,10 @@ const Main = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const game = useSelector(selectGame);
+// <<<<<<< memory
+//   //const user = useSelector(selectUserData);
+// =======
+// >>>>>>> flashcards
 
   const getRef = async () => {
     return database.ref('database/vocabulary');
@@ -52,6 +64,7 @@ const Main = (props) => {
       </Board>
     </>
   );
+
 };
 
 export default Main;

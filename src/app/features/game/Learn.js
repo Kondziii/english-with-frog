@@ -1,4 +1,18 @@
 import { makeStyles } from '@material-ui/core/styles';
+// <<<<<<< memory
+// import Button from '@material-ui/core/Button';
+// import Memory from './memory/Memory';
+// import { 
+//     Paper, 
+//     Grid, 
+//     GridList,
+//     FormControl, 
+//     RadioGroup, 
+//     FormControlLabel,
+//     Radio,
+//     Typography
+//  } from '@material-ui/core';
+// =======
 import {
   Grid,
   GridList,
@@ -7,6 +21,7 @@ import {
   FormControlLabel,
   Radio,
 } from '@material-ui/core';
+// >>>>>>> flashcards
 import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectChapter } from './gameSlice';
@@ -48,6 +63,18 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Learn = (props) => {
+// <<<<<<< memory
+//     const classes = useStyles();
+//     const dispatch = useDispatch();
+//     const game = useSelector(selectGame);
+//     const [value, setValue] = React.useState('0');
+//     const [choice, setChoice] = React.useState('0');
+
+//     const handleChange = (e) => {
+//         setValue(e.target.value)
+//         console.log(e.target.value);
+//     };
+// =======
   const classes = useStyles();
   const dispatch = useDispatch();
   const game = useSelector(selectGame);
@@ -83,11 +110,62 @@ const Learn = (props) => {
     }
     return 150;
   };
+// >>>>>>> flashcards
 
   const chapterChangeHandler = (e) => {
     dispatch(selectChapter(e.target.value));
   };
 
+// <<<<<<< memory
+//     const getCellHeight = () => {
+//         if (isWidthUp('xl', props.width)) { return 300; }
+//         if (isWidthUp('lg', props.width)) { return 250; }
+//         if (isWidthUp('md', props.width)) { return 200; }
+//         if (isWidthUp('sm', props.width)) { return 200; }
+//         return 150;
+//     };
+
+//     const selectActivity = (a) => {
+//         setChoice(a);
+//     }
+        
+
+//     return (
+//         <div>
+//             { 
+//             choice == '0' ?
+//             <FormControl >  
+//                 <RadioGroup>
+//                     <Paper className={classes.title}>
+//                         <Typography className={classes.title_text} variant="h3">DZIAŁY</Typography>
+//                     </Paper>
+//                     <GridList 
+//                     cellHeight={getCellHeight()} 
+//                     cols={1} 
+//                     className={classes.gridList}>
+//                         <GridList cellHeight={30} cols={getGridListCols()}>
+//                             {Object.keys(game.vocabulary).map(key => (
+//                                 <Grid key={key}>
+//                                     <FormControlLabel value={key} control={<Radio color="primary"/>} label={game.vocabulary[key]['key']} onChange={handleChange}/>
+//                                 </Grid>
+//                             ))}
+//                         </GridList>                  
+//                     </GridList>
+//                 </RadioGroup>
+//                 <div className={classes.memoraITP}>
+//                     <Button onClick={() => selectActivity('1')}>Memory</Button>
+//                     <Button>Fiszki</Button>
+//                     <Button>Test</Button>
+//                     {/* Miejsce na testy, fiszki, memory i inne */}
+//                 </div>  
+//             </FormControl>
+//             :
+//             <Memory words={game.vocabulary[value]['value']}></Memory>
+            
+//         }
+//         </div>         
+//     );
+// =======
   return (
     <FormControl className={classes.root}>
       <RadioGroup>
@@ -116,6 +194,7 @@ const Learn = (props) => {
       </RadioGroup>
     </FormControl>
   );
+// >>>>>>> flashcards
 };
 
 export default withWidth()(Learn);

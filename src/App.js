@@ -12,6 +12,9 @@ import { useEffect } from 'react';
 import Main from './app/features/game/Main';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+// <<<<<<< memory
+// import Memory from './app/features/game/memory/Memory'
+// =======
 import { toggleDict } from './app/features/game/gameSlice';
 import Navigation from './app/features/game/Navigation';
 import { makeStyles } from '@material-ui/core/styles';
@@ -26,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
     background: '#eee',
   },
 }));
+
 
 let theme = createMuiTheme({
   palette: {
@@ -80,6 +84,17 @@ function App() {
           <Redirect to='/login'></Redirect>
         </Switch>
       ) : (
+// <<<<<<< memory
+//         <Switch>
+//           <Route exact path='/'>
+//             <Main />
+//           </Route>
+//           <Route exact path='/memory'>
+//             <Memory />
+//           </Route>
+//           <Redirect to='/' />
+//         </Switch>
+// =======
         <div className={classes.root}>
           <Navigation onDictOpen={toggleSideBarHandler} />
           <Switch>
