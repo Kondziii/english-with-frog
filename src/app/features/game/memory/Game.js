@@ -6,6 +6,9 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
 import _ from 'underscore';
 
 const useStyles = makeStyles((theme) => ({
@@ -18,55 +21,46 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: '0hv',
 
     },
-    title_text: {
+    end: {
         margin: '1vh'
-    },
-    paper: {
-      padding: theme.spacing(1),
-      textAlign: 'center',
-      color: theme.palette.text.secondary,
-    },
-    startButton: {
-        textAlign: 'center',
-        width: '100%',
     },
     card : {
         display: 'inline-block',
         margin : '20',
         width: '10vw',
         height: '15vh',
-        background: '#4caf50',
         border: '2px solid white',     
         textAlign: 'center',   
-        verticalAlign: 'middle'
+        verticalAlign: 'middle',
+        background: '#4caf50',
     },
     open: {
         fontSize:20,
-        verticalAlign: 'middle'
+        verticalAlign: 'middle',
+        
     },
     blank: {
         fontSize:0,
+        background: 'green',
     },
     matched : {
-        visibility: 'hidden',
+        //visibility: 'hidden',
+        opacity: '0.5',
+        cursor: 'not-allowed',
+        pointerEvents: 'none',
     }
   }));
 
 const Game = (props) => {
+    console.log(props.words);
 
     const classes = useStyles();
 
     let cards = [];
     const [points, setPoints] = useState(0);
-    const [isStarted, setIsStarted] = useState(false);
     const [isEnded, setIsEnded] = useState(false);
-    //const [counter, setCounter] = useState(0);
     const startTime = performance.now();
-    //const wordsArray = _.shuffle(_.flatten(_.pairs(props.words),1));
 
-    const startGame = () => {
-        setIsStarted(!isStarted);
-    }
 
     useEffect (() => {
         if(points >= 8) {
@@ -124,22 +118,27 @@ const Game = (props) => {
 
     return(
         <Grid container className={classes.root}>
-            {
-                isStarted?
-                (
+            {   
                 !isEnded ?
                 (<div className={classes.div}>                          
                     <Paper className={classes.title}>
-                        <Typography className={classes.title_text} variant="h3">Znajdź pary</Typography>
                         <Typography className={classes.title_text} variant="h5">Zdobyte Punkty : {points}</Typography>
                     </Paper>
                     <GridList cellHeight={160} className={classes.gridList} cols={4}>
                         {props.array.map((value) =>  (
                             <GridListTile key={value} cols={1}>
-                                <Typography key={value} value={value} className={`${classes.card} ${classes.blank}`} 
+                                {/* <Typography key={value} value={value} className={`${classes.card} ${classes.blank}`} 
                                 onClick={clickHandler} clicked="False">
                                     {value}
-                                </Typography>
+                                </Typography> */}
+                                <Card>
+                                    <CardContent>
+                                        <Typography key={value} value={value} className={`${classes.card} ${classes.blank}`} 
+                                        onClick={clickHandler} clicked="False">
+                                            {value}
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
                             </GridListTile>
                         ))}
                     </GridList>
@@ -147,13 +146,10 @@ const Game = (props) => {
                 :
                 <div className={classes.div} >
                     <Paper className={classes.title}>
-                        <Typography className={classes.title_text} variant="h3">Koniec Gry</Typography>
-                        <Typography className={classes.title_text} variant="h5">Twój czas to {Math.floor((performance.now() - startTime)*100)} sekund</Typography>
+                        <Typography className={classes.end} variant="h3">Koniec Gry</Typography>
+                        <Typography className={classes.end} variant="h5">Twój czas to {Math.floor((performance.now() - startTime)*100)} sekund</Typography>
                     </Paper>
-                </div>
-                )
-                :
-                <Button variant="outlined" className={classes.startButton} onClick={startGame}>START</Button>
+                </div>  
             }          
         </Grid>
     )

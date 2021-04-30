@@ -21,6 +21,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Board from './app/features/game/Board';
 import FlashCards from './app/features/game/FlashCards';
 import { selectGame } from './app/features/game/gameSlice';
+import Memory from './app/features/game/memory/Memory';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -84,17 +85,6 @@ function App() {
           <Redirect to='/login'></Redirect>
         </Switch>
       ) : (
-// <<<<<<< memory
-//         <Switch>
-//           <Route exact path='/'>
-//             <Main />
-//           </Route>
-//           <Route exact path='/memory'>
-//             <Memory />
-//           </Route>
-//           <Redirect to='/' />
-//         </Switch>
-// =======
         <div className={classes.root}>
           <Navigation onDictOpen={toggleSideBarHandler} />
           <Switch>
@@ -106,6 +96,12 @@ function App() {
                 <FlashCards
                   items={game.vocabulary[game.selectedChapterIndex]}
                 />
+              </Board>
+            </Route>
+            <Route exact path='/memory'>
+              <Board>
+                {/* <Memory words={game.vocabulary[value]['value']}></Memory> */}
+                <Memory items={game.vocabulary[game.selectedChapterIndex]}></Memory>
               </Board>
             </Route>
             <Redirect to='/' />
