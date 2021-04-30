@@ -12,7 +12,24 @@ import { useEffect } from 'react';
 import Main from './app/features/game/Main';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Memory from './app/features/game/memory/Memory'
+// <<<<<<< memory
+// import Memory from './app/features/game/memory/Memory'
+// =======
+import { toggleDict } from './app/features/game/gameSlice';
+import Navigation from './app/features/game/Navigation';
+import { makeStyles } from '@material-ui/core/styles';
+import Board from './app/features/game/Board';
+import FlashCards from './app/features/game/FlashCards';
+import { selectGame } from './app/features/game/gameSlice';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    minHeight: '100vh',
+    width: '100%',
+    background: '#eee',
+  },
+}));
+
 
 let theme = createMuiTheme({
   palette: {
@@ -24,9 +41,11 @@ theme = responsiveFontSizes(theme);
 
 function App() {
   const user = useSelector(selectUser);
+  const game = useSelector(selectGame);
   const dispatch = useDispatch();
+  const classes = useStyles();
 
-  useEffect(() => {
+  const isLogged = async () => {
     auth.onAuthStateChanged((userAuth) => {
       if (userAuth) {
         if (userAuth.displayName) {
@@ -42,7 +61,15 @@ function App() {
         dispatch(logout());
       }
     });
+  };
+
+  useEffect(() => {
+    isLogged();
   }, [dispatch]);
+
+  const toggleSideBarHandler = () => {
+    dispatch(toggleDict());
+  };
 
   return (
     <MuiThemeProvider theme={theme}>
@@ -57,15 +84,33 @@ function App() {
           <Redirect to='/login'></Redirect>
         </Switch>
       ) : (
-        <Switch>
-          <Route exact path='/'>
-            <Main />
-          </Route>
-          <Route exact path='/memory'>
-            <Memory />
-          </Route>
-          <Redirect to='/' />
-        </Switch>
+// <<<<<<< memory
+//         <Switch>
+//           <Route exact path='/'>
+//             <Main />
+//           </Route>
+//           <Route exact path='/memory'>
+//             <Memory />
+//           </Route>
+//           <Redirect to='/' />
+//         </Switch>
+// =======
+        <div className={classes.root}>
+          <Navigation onDictOpen={toggleSideBarHandler} />
+          <Switch>
+            <Route exact path='/'>
+              <Main onDictOpen={toggleSideBarHandler} />
+            </Route>
+            <Route exact path='/flashcards'>
+              <Board>
+                <FlashCards
+                  items={game.vocabulary[game.selectedChapterIndex]}
+                />
+              </Board>
+            </Route>
+            <Redirect to='/' />
+          </Switch>
+        </div>
       )}
       <ToastContainer />
     </MuiThemeProvider>

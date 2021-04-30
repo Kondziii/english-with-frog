@@ -5,25 +5,47 @@ export const gameSlice = createSlice({
   initialState: {
     vocabulary: [],
     isDictOpen: false,
-    view: '',
+    isFlashCardsOpen: false,
+    selectedChapterIndex: '',
+    chapterWords: [],
+    currentFlashCard: 0,
   },
   reducers: {
     fetchVocabulary: (state, action) => {
       state.vocabulary = action.payload;
     },
 
-    changeView: (state, action) => {
-      state.view = action.payload;
-    },
-
     toggleDict: (state) => {
       state.isDictOpen = !state.isDictOpen;
+    },
+
+    openFlashCards: (state) => {
+      state.isFlashCardsOpen = true;
+    },
+
+    selectChapter: (state, action) => {
+      state.selectedChapterIndex = action.payload;
+    },
+
+    getChapterWords: (state, action) => {
+      state.chapterWords = action.payload;
+    },
+
+    getCurrentFlashCard: (state, action) => {
+      state.currentFlashCard = action.payload;
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { fetchVocabulary, toggleDict, changeView } = gameSlice.actions;
+export const {
+  fetchVocabulary,
+  toggleDict,
+  openFlashCards,
+  selectChapter,
+  getChapterWords,
+  getCurrentFlashCard,
+} = gameSlice.actions;
 
 export const selectGame = (state) => state.game;
 
