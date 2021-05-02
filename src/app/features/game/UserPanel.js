@@ -16,6 +16,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
+    zIndex: '2',
   },
   paper: {
     marginRight: theme.spacing(2),

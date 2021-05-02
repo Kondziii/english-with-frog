@@ -8,7 +8,7 @@ import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles';
 import green from '@material-ui/core/colors/green';
 import { MuiThemeProvider } from '@material-ui/core';
 import { auth } from './app/firebase';
-import { useEffect } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import Main from './app/features/game/Main';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -18,12 +18,21 @@ import { makeStyles } from '@material-ui/core/styles';
 import Board from './app/features/game/Board';
 import FlashCards from './app/features/game/FlashCards';
 import { selectGame } from './app/features/game/gameSlice';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     minHeight: '100vh',
     width: '100%',
     background: '#eee',
+  },
+
+  loadingCircle: {
+    height: '100vh',
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 }));
 
@@ -40,6 +49,7 @@ function App() {
   const game = useSelector(selectGame);
   const dispatch = useDispatch();
   const classes = useStyles();
+  const [isLoading, setLoading] = useState(true);
 
   const isLogged = async () => {
     auth.onAuthStateChanged((userAuth) => {
@@ -52,14 +62,16 @@ function App() {
               displayName: userAuth.displayName,
             })
           );
+          setLoading(false);
         }
       } else {
         dispatch(logout());
+        setLoading(false);
       }
     });
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     isLogged();
   }, [dispatch]);
 
@@ -67,39 +79,60 @@ function App() {
     dispatch(toggleDict());
   };
 
-  return (
-    <MuiThemeProvider theme={theme}>
-      {!user ? (
+  const unAuthorizedView = () => {
+    return (
+      <Switch>
+        <Route exact path='/login'>
+          <Login />
+        </Route>
+        <Route exact path='/register'>
+          <Register />
+        </Route>
+        <Redirect to='/login'></Redirect>
+      </Switch>
+    );
+  };
+
+  const authorizedView = () => {
+    return (
+      <div className={classes.root}>
+        <Navigation onDictOpen={toggleSideBarHandler} />
         <Switch>
-          <Route exact path='/login'>
-            <Login />
+          <Route exact path='/'>
+            <Main onDictOpen={toggleSideBarHandler} />
           </Route>
-          <Route exact path='/register'>
-            <Register />
+          <Route exact path='/flashcards'>
+            <Board>
+              <FlashCards
+                items={game.vocabulary[game.selectedChapterIndex]}
+                cardIndex={game.currentFlashCard}
+              />
+            </Board>
           </Route>
-          <Redirect to='/login'></Redirect>
+          <Redirect to='/' />
         </Switch>
-      ) : (
-        <div className={classes.root}>
-          <Navigation onDictOpen={toggleSideBarHandler} />
-          <Switch>
-            <Route exact path='/'>
-              <Main onDictOpen={toggleSideBarHandler} />
-            </Route>
-            <Route exact path='/flashcards'>
-              <Board>
-                <FlashCards
-                  items={game.vocabulary[game.selectedChapterIndex]}
-                />
-              </Board>
-            </Route>
-            <Redirect to='/' />
-          </Switch>
+      </div>
+    );
+  };
+
+  if (isLoading) {
+    return (
+      <MuiThemeProvider theme={theme}>
+        <div className={classes.loadingCircle}>
+          <CircularProgress color='primary' />
         </div>
-      )}
-      <ToastContainer />
-    </MuiThemeProvider>
-  );
+      </MuiThemeProvider>
+    );
+  }
+
+  if (!isLoading) {
+    return (
+      <MuiThemeProvider theme={theme}>
+        {!user ? unAuthorizedView() : authorizedView()}
+        <ToastContainer />
+      </MuiThemeProvider>
+    );
+  }
 }
 
 export default App;

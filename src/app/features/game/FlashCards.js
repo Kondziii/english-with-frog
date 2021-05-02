@@ -2,7 +2,6 @@ import {
   Typography,
   Grid,
   Button,
-  Paper,
   IconButton,
   Avatar,
 } from '@material-ui/core';
@@ -17,6 +16,7 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import { useState } from 'react';
 import { getCurrentFlashCard } from './gameSlice';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -83,17 +83,20 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const FlashCards = (props) => {
+  const history = useHistory();
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(props.cardIndex);
   const [prevLimit, setPrevLimit] = useState(true);
   const [nextLimit, setNextLimit] = useState(false);
   const [isEnd, setIsEnd] = useState(false);
   const length = Object.keys(props.items.value).length;
 
   useEffect(() => {
+    // console.log(parseInt(props.cardIndex));
     dispatch(getChapterWords(props.items.value));
     dispatch(getCurrentFlashCard(index));
+    // console.log(props.cardIndex);
   }, [index]);
 
   useEffect(() => {
@@ -122,6 +125,16 @@ const FlashCards = (props) => {
       }
       return (prevIndex -= 1);
     });
+  };
+
+  const backToMenuHandler = () => {
+    history.push('/');
+    dispatch(getCurrentFlashCard(0));
+  };
+
+  const endChapterHandler = () => {
+    history.push('/');
+    dispatch(getCurrentFlashCard(0));
   };
 
   return (
@@ -179,6 +192,7 @@ const FlashCards = (props) => {
             className={classes.buttonStyleBack}
             style={{ opacity: isEnd ? 0 : 1 }}
             disabled={isEnd}
+            onClick={backToMenuHandler}
           >
             <ArrowLeftIcon />
             Wróć do menu
@@ -187,6 +201,7 @@ const FlashCards = (props) => {
             className={classes.buttonStyleEnd}
             style={{ opacity: !isEnd ? 0 : 1 }}
             disabled={!isEnd}
+            onClick={endChapterHandler}
           >
             Zakończ nauke
             <ArrowRightIcon />
