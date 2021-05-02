@@ -91,7 +91,7 @@ const FlashCards = (props) => {
   const [index, setIndex] = useState(props.cardIndex);
   const [prevLimit, setPrevLimit] = useState(props.cardIndex === 0);
   const [nextLimit, setNextLimit] = useState(props.cardIndex === length - 1);
-  const [isEnd, setIsEnd] = useState(props.state);
+  const isEnd = props.state;
 
   useEffect(() => {
     dispatch(getChapterWords(props.items.value));
@@ -100,7 +100,6 @@ const FlashCards = (props) => {
 
   useEffect(() => {
     if (index == length - 1) {
-      setIsEnd(true);
       dispatch(getCurrentLearningState(true));
       //TODO push information about finishing this chapter to database of this user
     }
@@ -134,6 +133,7 @@ const FlashCards = (props) => {
   const endChapterHandler = () => {
     history.push('/');
     dispatch(getCurrentFlashCard(0));
+    dispatch(getCurrentLearningState(false));
   };
 
   return (

@@ -5,6 +5,7 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import ChapterProgressBar from './ChapterProgressBar';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     },
 
     [theme.breakpoints.down('sm')]: {
-      height: '17vh',
+      height: '18vh',
     },
   },
 
@@ -48,6 +49,19 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '1.3rem',
     fontWeight: 'bold',
   },
+
+  barContainer: {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    bottom: 40,
+    left: 0,
+    [theme.breakpoints.down('xs')]: {
+      bottom: 50,
+    },
+  },
 }));
 
 const GameTypeCard = (props) => {
@@ -61,6 +75,9 @@ const GameTypeCard = (props) => {
           <span className={classes.spanStyle}>- {props.description}</span>
         </Typography>
       </CardContent>
+      <div className={classes.barContainer}>
+        <ChapterProgressBar />
+      </div>
 
       <CardActions>
         <Button
