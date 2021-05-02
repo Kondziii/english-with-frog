@@ -35,9 +35,7 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState(false);
   const passwordValidate = (value) => {
-    const isError = !value.match(
-      /^(?:(?:(?=.*?[0-9])(?=.*?[-!@#$%&*ˆ+=_])|(?:(?=.*?[0-9])|(?=.*?[A-Z])|(?=.*?[-!@#$%&*ˆ+=_])))|(?=.*?[a-z])(?=.*?[0-9])(?=.*?[-!@#$%&*ˆ+=_]))[A-Za-z0-9-!@#$%&*ˆ+=_]{6,}$/
-    );
+    const isError = !value.match(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{6,}$$/);
     setPasswordError(isError);
     return isError;
   };
@@ -163,7 +161,7 @@ const Register = () => {
                 error={passwordError}
                 helperText={
                   passwordError &&
-                  'Hasło musi mieć przynajmniej 6 znaków, przynajmniej 1 duzą literę lub cyfrę!'
+                  'Hasło musi mieć przynajmniej 6 znaków, przynajmniej 1 duzą literę i cyfrę!'
                 }
                 onBlur={() => {
                   passwordValidate(password);

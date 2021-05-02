@@ -15,7 +15,7 @@ import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import { useState } from 'react';
-import { getCurrentFlashCard } from './gameSlice';
+import { getCurrentFlashCard, getCurrentLearningState } from './gameSlice';
 import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
@@ -86,23 +86,22 @@ const FlashCards = (props) => {
   const history = useHistory();
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [index, setIndex] = useState(props.cardIndex);
-  const [prevLimit, setPrevLimit] = useState(true);
-  const [nextLimit, setNextLimit] = useState(false);
-  const [isEnd, setIsEnd] = useState(false);
+
   const length = Object.keys(props.items.value).length;
+  const [index, setIndex] = useState(props.cardIndex);
+  const [prevLimit, setPrevLimit] = useState(props.cardIndex === 0);
+  const [nextLimit, setNextLimit] = useState(props.cardIndex === length - 1);
+  const [isEnd, setIsEnd] = useState(props.state);
 
   useEffect(() => {
-    // console.log(parseInt(props.cardIndex));
     dispatch(getChapterWords(props.items.value));
     dispatch(getCurrentFlashCard(index));
-    // console.log(props.cardIndex);
   }, [index]);
 
   useEffect(() => {
     if (index == length - 1) {
       setIsEnd(true);
-
+      dispatch(getCurrentLearningState(true));
       //TODO push information about finishing this chapter to database of this user
     }
   });

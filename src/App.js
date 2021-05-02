@@ -8,7 +8,7 @@ import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles';
 import green from '@material-ui/core/colors/green';
 import { MuiThemeProvider } from '@material-ui/core';
 import { auth } from './app/firebase';
-import { useLayoutEffect, useState } from 'react';
+import { useLayoutEffect } from 'react';
 import Main from './app/features/game/Main';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -18,7 +18,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Board from './app/features/game/Board';
 import FlashCards from './app/features/game/FlashCards';
 import { selectGame } from './app/features/game/gameSlice';
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,7 +48,6 @@ function App() {
   const game = useSelector(selectGame);
   const dispatch = useDispatch();
   const classes = useStyles();
-  const [isLoading, setLoading] = useState(true);
 
   const isLogged = async () => {
     auth.onAuthStateChanged((userAuth) => {
@@ -62,11 +60,9 @@ function App() {
               displayName: userAuth.displayName,
             })
           );
-          setLoading(false);
         }
       } else {
         dispatch(logout());
-        setLoading(false);
       }
     });
   };
@@ -106,6 +102,7 @@ function App() {
               <FlashCards
                 items={game.vocabulary[game.selectedChapterIndex]}
                 cardIndex={game.currentFlashCard}
+                state={game.isChapterFinished}
               />
             </Board>
           </Route>
@@ -115,24 +112,12 @@ function App() {
     );
   };
 
-  if (isLoading) {
-    return (
-      <MuiThemeProvider theme={theme}>
-        <div className={classes.loadingCircle}>
-          <CircularProgress color='primary' />
-        </div>
-      </MuiThemeProvider>
-    );
-  }
-
-  if (!isLoading) {
-    return (
-      <MuiThemeProvider theme={theme}>
-        {!user ? unAuthorizedView() : authorizedView()}
-        <ToastContainer />
-      </MuiThemeProvider>
-    );
-  }
+  return (
+    <MuiThemeProvider theme={theme}>
+      {!user ? unAuthorizedView() : authorizedView()}
+      <ToastContainer />
+    </MuiThemeProvider>
+  );
 }
 
 export default App;
