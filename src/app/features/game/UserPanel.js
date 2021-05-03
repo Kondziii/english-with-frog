@@ -12,6 +12,7 @@ import { useSelector } from 'react-redux';
 import { selectUser } from '../auth/userSlice';
 import { auth } from '../../firebase';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import { GetMoney } from '../db/getUser';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,6 +29,7 @@ const UserPanel = () => {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
   const user = useSelector(selectUser);
+  const money = GetMoney(user.uid)
 
   const logout = () => {
     auth.signOut();
@@ -65,6 +67,7 @@ const UserPanel = () => {
   return (
     <div className={classes.root}>
       <div>
+        <Button disabled={true}>{money}</Button>
         <Button
           ref={anchorRef}
           aria-controls={open ? 'menu-list-grow' : undefined}

@@ -6,6 +6,7 @@ export const gameSlice = createSlice({
     vocabulary: [],
     isDictOpen: false,
     isFlashCardsOpen: false,
+    isMatchingOpen: false,
     selectedChapterIndex: '',
     chapterWords: [],
     currentFlashCard: 0,
@@ -22,6 +23,10 @@ export const gameSlice = createSlice({
 
     openFlashCards: (state) => {
       state.isFlashCardsOpen = true;
+    },
+
+    openMatching: (state) => {
+      state.isMatchingOpen = true;
     },
 
     selectChapter: (state, action) => {
@@ -47,6 +52,7 @@ export const {
   fetchVocabulary,
   toggleDict,
   openFlashCards,
+  openMatching,
   selectChapter,
   getChapterWords,
   getCurrentFlashCard,

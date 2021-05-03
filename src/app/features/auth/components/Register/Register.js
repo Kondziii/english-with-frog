@@ -15,6 +15,8 @@ import { useState } from 'react';
 import { auth } from '../../../../firebase';
 import { useDispatch } from 'react-redux';
 import { login } from '../../userSlice';
+import { firestore } from '../../../../firebase';
+import { createUser } from '../../../db/createUser';
 
 const Register = () => {
   const classes = useStyles();
@@ -35,7 +37,9 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState(false);
   const passwordValidate = (value) => {
-    const isError = !value.match(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{6,}$$/);
+    const isError = !value.match(
+      /^(?:(?:(?=.*?[0-9])(?=.*?[-!@#$%&*ˆ+=_])|(?:(?=.*?[0-9])|(?=.*?[A-Z])|(?=.*?[-!@#$%&*ˆ+=_])))|(?=.*?[a-z])(?=.*?[0-9])(?=.*?[-!@#$%&*ˆ+=_]))[A-Za-z0-9-!@#$%&*ˆ+=_]{6,}$/
+    );
     setPasswordError(isError);
     return isError;
   };
@@ -72,6 +76,7 @@ const Register = () => {
                   displayName: nickname,
                 })
               );
+              createUser(userAuth.user.uid);
             });
         })
         .catch((err) => {
@@ -161,7 +166,7 @@ const Register = () => {
                 error={passwordError}
                 helperText={
                   passwordError &&
-                  'Hasło musi mieć przynajmniej 6 znaków, przynajmniej 1 duzą literę i cyfrę!'
+                  'Hasło musi mieć przynajmniej 6 znaków, przynajmniej 1 duzą literę lub cyfrę!'
                 }
                 onBlur={() => {
                   passwordValidate(password);

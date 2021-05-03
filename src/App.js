@@ -17,6 +17,7 @@ import Navigation from './app/features/game/Navigation';
 import { makeStyles } from '@material-ui/core/styles';
 import Board from './app/features/game/Board';
 import FlashCards from './app/features/game/FlashCards';
+import Matching from './app/features/game/Matching';
 import { selectGame } from './app/features/game/gameSlice';
 
 const useStyles = makeStyles((theme) => ({
@@ -102,6 +103,14 @@ function App() {
               <FlashCards
                 items={game.vocabulary[game.selectedChapterIndex]}
                 cardIndex={game.currentFlashCard}
+                state={game.isChapterFinished}
+              />
+            </Board>
+          </Route>
+          <Route exact path='/matching'>
+            <Board>
+              <Matching
+                items={game.vocabulary[game.selectedChapterIndex]}
                 state={game.isChapterFinished}
               />
             </Board>
