@@ -11,6 +11,8 @@
     "@testing-library/user-event": "^12.8.3",
     "firebase": "^8.3.1",
     "latest": "^0.2.0",
+    "lodash": "^4.17.21",
+    "lodash.invert": "^4.3.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.3",
@@ -20,6 +22,7 @@
     "redux": "^4.0.5",
     "redux-persist": "^6.0.0",
     "redux-starter-kit": "^2.0.0",
+    "shuffle-array": "^1.0.1",
     "web-vitals": "^1.1.1"
   },
   "scripts": {

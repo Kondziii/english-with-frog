@@ -18,6 +18,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Board from './app/features/game/Board';
 import FlashCards from './app/features/game/FlashCards';
 import Matching from './app/features/game/Matching';
+import Test from './app/features/game/Test';
 import { selectGame } from './app/features/game/gameSlice';
 
 const useStyles = makeStyles((theme) => ({
@@ -112,6 +113,13 @@ function App() {
               <Matching
                 items={game.vocabulary[game.selectedChapterIndex]}
                 state={game.isChapterFinished}
+              />
+            </Board>
+          </Route>
+          <Route exact path='/test'>
+            <Board>
+              <Test
+                items={game.vocabulary[game.selectedChapterIndex]}
               />
             </Board>
           </Route>

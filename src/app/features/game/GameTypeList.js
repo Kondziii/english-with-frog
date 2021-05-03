@@ -2,7 +2,7 @@ import { Grid } from '@material-ui/core';
 import GameTypeCard from './GameTypeCard';
 import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch } from 'react-redux';
-import { openFlashCards, openMatching } from './gameSlice';
+import { openFlashCards, openMatching, openTest } from './gameSlice';
 import { useSelector } from 'react-redux';
 import { selectGame } from './gameSlice';
 import { toast } from 'react-toastify';
@@ -64,6 +64,15 @@ const GameTypeList = () => {
     }
   };
 
+  const testHandler = () => {
+    if (game.selectedChapterIndex === '') {
+      toast.error('Nie wybrałeś działu.');
+    } else {
+      dispatch(openTest());
+      history.push('/test');
+    }
+  };
+
   return (
     <Grid container direction='row' className={classes.root}>
       <Grid item xs={12} sm={6} lg={3}>
@@ -94,6 +103,7 @@ const GameTypeList = () => {
           title={LEARN_TYPES[3].title}
           description={LEARN_TYPES[3].description}
           btnLabel={LEARN_TYPES[3].btnLabel}
+          onStart={testHandler}
         />
       </Grid>
     </Grid>

@@ -10,7 +10,7 @@ import ChapterProgressBar from './ChapterProgressBar';
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: '100%',
-    height: '22vh',
+    height: '20vh',
     margin: '1vh',
     overflow: 'auto',
     position: 'relative',
