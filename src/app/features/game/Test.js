@@ -89,6 +89,7 @@ import { GetTests } from '../db/getUser';
     const classes = useStyles();
     const dispatch = useDispatch();
     const user = useSelector(selectUser);
+    const [isStart, setIsStart] = useState(false);
     const [isEnd, setIsEnd] = useState(false);
     const [score, setScore] = useState(0);
     const [finalArray, setFinalArray] = useState([]);
@@ -113,10 +114,10 @@ import { GetTests } from '../db/getUser';
       dispatch(getChapterWords(props.items.value));
     });
     
-    const backToMenuHandler = () => {
-      history.push('/');
+    const startTestHandler = () => {
+        setIsEnd(true);
     };
-  
+
     const endTestHandler = () => {
         setFinalArray(points);
         var s = 0;
@@ -131,9 +132,12 @@ import { GetTests } from '../db/getUser';
             updateTests(user.uid, props.items.key, s);
         };
         
-
         setIsEnd(true);
     };
+
+    const backToMenuHandler = () => {
+        history.push('/');
+      };
     
     const check = (input, correct, stageOne) => {
         if(input === correct) {
@@ -169,7 +173,6 @@ import { GetTests } from '../db/getUser';
 
     var n=0;
     var m=0;
-
 
     return (
       <div className={classes.root}>
