@@ -11,7 +11,7 @@ import shuffle from 'shuffle-array';
 import { selectUser } from '../auth/userSlice';
 import { useSelector } from 'react-redux';
 import { addMoney, updateTests } from '../db/updateUser';
-import { GetTests, getTests } from '../db/getUser';
+import { GetTests } from '../db/getUser';
 
   const useStyles = makeStyles((theme) => ({
     root: {
@@ -77,7 +77,7 @@ import { GetTests, getTests } from '../db/getUser';
     },
 
     resultTextBox: {
-        width: '21vh',
+        width: '20vh',
         padding: '0%',
     },
 
@@ -92,7 +92,7 @@ import { GetTests, getTests } from '../db/getUser';
     const [isEnd, setIsEnd] = useState(false);
     const [score, setScore] = useState(0);
     const [finalArray, setFinalArray] = useState([]);
-    const isDone = GetTests(user.uid, props.items.key);
+    const getTestResult = GetTests(user.uid, props.items.key);
   
     const testWords = shuffle.pick(Object.entries(props.items.value).flatMap(([key, value]) => {
          return [
@@ -106,9 +106,8 @@ import { GetTests, getTests } from '../db/getUser';
         ];
      });
 
-    const temp = Array.from(testWords);
-    const firstWords = temp.splice(0,7);
-    const secondWords = temp.splice(-7);
+    const firstWords = testWords.splice(0,7);
+    const secondWords = testWords.splice(-7);
 
     useEffect(() => {
       dispatch(getChapterWords(props.items.value));
@@ -119,15 +118,21 @@ import { GetTests, getTests } from '../db/getUser';
     };
   
     const endTestHandler = () => {
-      setFinalArray(points);
-      setScore(() => {
-            var s = 0;
-            for(let word in points) {
-              s+=points[word].point;
-          }
-          return s;
-      })
-      setIsEnd(true);
+        setFinalArray(points);
+        var s = 0;
+
+        for(let word in points) {
+            s+=points[word].point;
+            setScore(s);
+        }
+        
+        if (getTestResult < s){
+            addMoney(user.uid, (s*10));
+            updateTests(user.uid, props.items.key, s);
+        };
+        
+
+        setIsEnd(true);
     };
     
     const check = (input, correct, stageOne) => {
@@ -229,9 +234,9 @@ import { GetTests, getTests } from '../db/getUser';
                                     <TextField 
                                     value={word.value}
                                     InputProps={{
-                                    readOnly: true,
-                                    classes: {input: classes.resizeTextBox}
+                                    readOnly: true
                                     }}
+                                    className={classes.resizeTextBox}
                                     color='secondary'
                                     />        
                                 </ListItem>
@@ -242,9 +247,7 @@ import { GetTests, getTests } from '../db/getUser';
                                 <ListItem key={word.key}>
                                     <TextField 
                                     onChange={(e) => check(e.target.value, word.key, false)}
-                                    InputProps={{
-                                        classes: {input: classes.resizeTextBox},
-                                    }}
+                                    className={classes.resizeTextBox}
                                     />
                                 </ListItem>
                             ))}
