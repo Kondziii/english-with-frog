@@ -20,6 +20,7 @@ import FlashCards from './app/features/game/FlashCards';
 import Matching from './app/features/game/Matching';
 import Test from './app/features/game/Test';
 import { selectGame } from './app/features/game/gameSlice';
+import Memory from './app/features/game/memory/Memory';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -123,6 +124,11 @@ function App() {
               />
             </Board>
           </Route>
+          <Route exact path='/memory'>
+              <Board>
+                <Memory items={game.vocabulary[game.selectedChapterIndex]}></Memory>
+              </Board>
+            </Route>
           <Redirect to='/' />
         </Switch>
       </div>

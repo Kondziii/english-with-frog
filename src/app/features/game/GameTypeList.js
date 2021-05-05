@@ -55,6 +55,15 @@ const GameTypeList = () => {
     }
   };
 
+  const memoryHandler = () => {
+    if (game.selectedChapterIndex === '') {
+      toast.error('Nie wybrałeś działu.');
+    } else {
+      dispatch(openFlashCards());
+      history.push('/memory');
+    }
+  }
+
   const matchingHandler = () => {
     if (game.selectedChapterIndex === '') {
       toast.error('Nie wybrałeś działu.');
@@ -96,6 +105,7 @@ const GameTypeList = () => {
           title={LEARN_TYPES[2].title}
           description={LEARN_TYPES[2].description}
           btnLabel={LEARN_TYPES[2].btnLabel}
+          onStart={memoryHandler}
         />
       </Grid>
       <Grid item xs={12} sm={6} lg={3}>
