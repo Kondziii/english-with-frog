@@ -2,6 +2,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Game from './Game';
 import _ from 'underscore';
 import { useState } from 'react';
+import { selectUser } from '../../auth/userSlice';
 import {
     Typography,
     Grid,
@@ -63,21 +64,7 @@ const Memory = (props) => {
                         <span style={{ fontWeight: 'bold' }}>{props.items.key}</span>
                     </Typography>
                     <Grid item>
-                        <Grid item xs={12} style={{ textAlign: 'center' }}>
-                            {
-                                !start ?
-                                <Button
-                                    size='large'
-                                    className={classes.btnStyle}
-                                    onClick={startGame}
-                                    >
-                                    START
-                                </Button>
-                                :
-                                <Game words={props.items.value} array={wordsArray}></Game>
-                            }
-                            
-                        </Grid>
+                        <Game words={props.items.value} array={wordsArray}></Game>
                     </Grid>
                 
                 </Grid>

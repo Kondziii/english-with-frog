@@ -2,14 +2,15 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import React, {useEffect, useState} from 'react';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import _ from 'underscore';
+import {addMoney} from '../../db/updateUser';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../auth/userSlice';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -19,37 +20,29 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'center',
         margin: '2vh',
         marginBottom: '0hv',
-
     },
     end: {
-        margin: '1vh'
+        margin: '1vh',
     },
     card : {
-        //display: 'inline-block',
         margin : '20',
         width: '10vw',
         height: '15vh',
         border: '2px solid white',     
-        // textAlign: 'center',   
-        // verticalAlign: 'middle',
-        // textAlign: 'center',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         background: '#4caf50',
+        color: "white"
     },
     open: {
-        fontSize:20,
-        // verticalAlign: 'middle',
-        // textAlign: 'center',
-        
+        fontSize:20,       
     },
     blank: {
         fontSize:0,
         background: 'green',
     },
     matched : {
-        //visibility: 'hidden',
         fontSize:20,
         opacity: '0.5',
         cursor: 'not-allowed',
@@ -57,19 +50,12 @@ const useStyles = makeStyles((theme) => ({
     },
     container: {
         justifyContent: 'center',
-        // direction: 'column',
-        // lineHeight: '100%',
+        display: 'flex',
     },
-    // text: {
-    //     display: 'flex',
-    //     alignItems: 'center',
-    //     justifyContent: 'center',
-    // }
   }));
 
 const Game = (props) => {
-    console.log(props.words);
-
+    const user = useSelector(selectUser);
     const classes = useStyles();
 
     let cards = [];
@@ -84,9 +70,14 @@ const Game = (props) => {
         }
     }, [points]) 
 
+    useEffect (() => {
+        if(isEnded === true) {
+            addMoney(user.uid, (30));
+        }
+    }, [isEnded]) 
+
     const clickHandler = (event) => {
         let card = event.target;
-        console.log(cards.length);
         
         if(cards.length === 0) {
             switchCard(card);
@@ -133,36 +124,31 @@ const Game = (props) => {
 
 
     return(
-        <Grid container className={classes.root}>
-            {   
-                !isEnded ?
-                (<div className={classes.div}>                          
-                    <Paper className={classes.title}>
-                        <Typography className={classes.title_text} variant="h5">Zdobyte Punkty : {points}</Typography>
-                    </Paper>
-                    <GridList cellHeight={160} className={classes.gridList} cols={4}>
-                        {props.array.map((value) =>  (
-                            <GridListTile key={value} cols={1} className={classes.container}>
-                                <Card>
-                                    <CardContent className={classes.text}>
-                                        <Typography key={value} value={value} className={`${classes.card} ${classes.blank}`} 
-                                        onClick={clickHandler} clicked="False">
-                                            {value}
-                                        </Typography>
-                                    </CardContent>
-                                </Card>
-                            </GridListTile>
-                        ))}
-                    </GridList>
-                </div>   )  
-                :
-                <div className={classes.div} >
-                    <Paper className={classes.title}>
-                        <Typography className={classes.end} variant="h3">Koniec Gry</Typography>
-                        <Typography className={classes.end} variant="h5">Twój czas to {Math.floor((performance.now() - startTime)*100)} sekund</Typography>
-                    </Paper>
-                </div>  
-            }          
+        <Grid container className={classes.root}>         
+            <div className={classes.div}>                          
+                <Paper className={classes.title}>
+                {
+                    isEnded ?
+                    <Typography className={classes.end} variant="h3">Koniec Gry</Typography>
+                    :
+                    <Typography className={classes.title_text} variant="h5">Zdobyte Punkty : {points}</Typography>
+                }   
+                </Paper>
+                <GridList cellHeight={160} className={classes.gridList} cols={4}>
+                    {props.array.map((value) =>  (
+                        <GridListTile key={value} cols={1} className={classes.container}>
+                            <Card>
+                                <CardContent>
+                                    <Typography key={value} value={value} className={`${classes.card} ${classes.blank}`} 
+                                    onClick={clickHandler} clicked="False">
+                                        {value}
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                        </GridListTile>
+                    ))}
+                </GridList>
+            </div>                    
         </Grid>
     )
 }
