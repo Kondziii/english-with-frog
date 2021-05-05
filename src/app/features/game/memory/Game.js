@@ -11,6 +11,7 @@ import _ from 'underscore';
 import {addMoney} from '../../db/updateUser';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../auth/userSlice';
+import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -25,9 +26,10 @@ const useStyles = makeStyles((theme) => ({
         margin: '1vh',
     },
     card : {
-        margin : '20',
-        width: '10vw',
-        height: '15vh',
+        // width: '10vw',
+        // height: '15vh',
+        width: '180px',
+        height: '120px',
         border: '2px solid white',     
         display: 'flex',
         alignItems: 'center',
@@ -51,6 +53,7 @@ const useStyles = makeStyles((theme) => ({
     container: {
         justifyContent: 'center',
         display: 'flex',
+        flexWrap: 'wrap',
     },
   }));
 
@@ -61,7 +64,7 @@ const Game = (props) => {
     let cards = [];
     const [points, setPoints] = useState(0);
     const [isEnded, setIsEnded] = useState(false);
-    const startTime = performance.now();
+    // const startTime = performance.now();
 
 
     useEffect (() => {
@@ -75,6 +78,38 @@ const Game = (props) => {
             addMoney(user.uid, (30));
         }
     }, [isEnded]) 
+
+    const getGridListCols = () => {
+        if (isWidthUp('xl', props.width)) {
+          return 4;
+        }
+        if (isWidthUp('lg', props.width)) {
+          return 3;
+        }
+        if (isWidthUp('md', props.width)) {
+          return 2;
+        }
+        if (isWidthUp('sm', props.width)) {
+          return 2;
+        }
+        return 1;
+      };
+    
+      const getCellHeight = () => {
+        if (isWidthUp('xl', props.width)) {
+          return 300;
+        }
+        if (isWidthUp('lg', props.width)) {
+          return 250;
+        }
+        if (isWidthUp('md', props.width)) {
+          return 200;
+        }
+        if (isWidthUp('sm', props.width)) {
+          return 200;
+        }
+        return 150;
+      };
 
     const clickHandler = (event) => {
         let card = event.target;
@@ -134,7 +169,7 @@ const Game = (props) => {
                     <Typography className={classes.title_text} variant="h5">Zdobyte Punkty : {points}</Typography>
                 }   
                 </Paper>
-                <GridList cellHeight={160} className={classes.gridList} cols={4}>
+                <GridList cellHeight={getCellHeight} className={classes.gridList} cols={getGridListCols()}>
                     {props.array.map((value) =>  (
                         <GridListTile key={value} cols={1} className={classes.container}>
                             <Card>
@@ -153,4 +188,4 @@ const Game = (props) => {
     )
 }
 
-export default Game;
+export default withWidth()(Game);
