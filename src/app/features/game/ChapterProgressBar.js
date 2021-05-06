@@ -10,22 +10,30 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'hidden',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-start',
+    transition: 'all 0.5s ease-out',
   },
 
   innerBar: {
     background: '#0aff00',
     height: '100%',
-    transition: 'all 0.3s ease-out',
+    transition: 'all 0.5s ease-out',
+  },
+
+  disabledProgressBar: {
+    width: '0%',
   },
 }));
 
 const ChapterProgressBar = (props) => {
   const classes = useStyles();
-  const fillValue = '50%';
-
+  const fillValue = props.fill + '%';
   return (
-    <div className={classes.outerBar}>
+    <div
+      className={
+        props.fill === null ? classes.disabledProgressBar : classes.outerBar
+      }
+    >
       <div className={classes.innerBar} style={{ width: fillValue }}></div>
     </div>
   );

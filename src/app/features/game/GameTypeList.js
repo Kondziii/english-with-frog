@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { selectGame } from './gameSlice';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
+import { selectUserInfo } from '../auth/userSlice';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,6 +46,7 @@ const GameTypeList = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const game = useSelector(selectGame);
+  const userInfo = useSelector(selectUserInfo);
 
   const flashCardsHandler = () => {
     if (game.selectedChapterIndex === '') {
@@ -62,7 +64,7 @@ const GameTypeList = () => {
       dispatch(openFlashCards());
       history.push('/memory');
     }
-  }
+  };
 
   const matchingHandler = () => {
     if (game.selectedChapterIndex === '') {
@@ -90,6 +92,13 @@ const GameTypeList = () => {
           description={LEARN_TYPES[0].description}
           btnLabel={LEARN_TYPES[0].btnLabel}
           onStart={flashCardsHandler}
+          progress={
+            game.selectedChapterIndex === ''
+              ? null
+              : userInfo.learning[
+                  Object.keys(userInfo.learning)[game.selectedChapterIndex]
+                ].fiszki
+          }
         />
       </Grid>
       <Grid item xs={12} sm={6} lg={3}>

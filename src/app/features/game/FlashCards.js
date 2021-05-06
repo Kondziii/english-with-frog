@@ -7,7 +7,6 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch } from 'react-redux';
-import { getChapterWords } from './gameSlice';
 import { useEffect } from 'react';
 import FlashCardsItem from './FlashCardsItem';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
@@ -17,6 +16,15 @@ import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import { useState } from 'react';
 import { getCurrentFlashCard, getCurrentLearningState } from './gameSlice';
 import { useHistory } from 'react-router-dom';
+import {
+  selectUserInfo,
+  selectUser,
+  updateMoneyState,
+} from '../auth/userSlice';
+import { useSelector } from 'react-redux';
+import EndDialog from './EndDialog';
+import constants from '../../../const';
+import { addMoney } from '../db/updateUser';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -86,24 +94,40 @@ const FlashCards = (props) => {
   const history = useHistory();
   const classes = useStyles();
   const dispatch = useDispatch();
+  const userInfo = useSelector(selectUserInfo);
+  const user = useSelector(selectUser);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const length = Object.keys(props.items.value).length;
   const [index, setIndex] = useState(props.cardIndex);
   const [prevLimit, setPrevLimit] = useState(props.cardIndex === 0);
   const [nextLimit, setNextLimit] = useState(props.cardIndex === length - 1);
   const isEnd = props.state;
+  const [updated, setIsUpdated] = useState(!props.state);
 
   useEffect(() => {
-    dispatch(getChapterWords(props.items.value));
     dispatch(getCurrentFlashCard(index));
   }, [index]);
 
   useEffect(() => {
     if (index == length - 1) {
       dispatch(getCurrentLearningState(true));
-      //TODO push information about finishing this chapter to database of this user
+      if (
+        userInfo.learning[Object.keys(userInfo.learning)[props.chapterIndex]]
+          .fiszki != 100 &&
+        updated
+      ) {
+        setIsUpdated(false);
+        dispatch(
+          updateMoneyState(
+            userInfo.money + constants.COINS_AMOUNT_FOR_FLASHCARDS
+          )
+        );
+        addMoney(user.uid, constants.COINS_AMOUNT_FOR_FLASHCARDS);
+        setIsDialogOpen(true);
+      }
     }
-  });
+  }, [index]);
 
   const nextCardHandler = () => {
     setPrevLimit(false);
@@ -127,13 +151,10 @@ const FlashCards = (props) => {
 
   const backToMenuHandler = () => {
     history.push('/');
-    dispatch(getCurrentFlashCard(0));
   };
 
   const endChapterHandler = () => {
     history.push('/');
-    dispatch(getCurrentFlashCard(0));
-    dispatch(getCurrentLearningState(false));
   };
 
   return (
@@ -207,6 +228,16 @@ const FlashCards = (props) => {
           </Button>
         </Grid>
       </Grid>
+      {isDialogOpen && (
+        <EndDialog
+          description='Fajnie, że zapoznałeś się z nowymi słówkami, jako nagrodę
+        otrzymujesz trochę monet, które możesz wydać na ulepszanie swojego
+        żabiego awatara.'
+          btnTitle='ok, rozumiem'
+          coinsAmount={constants.COINS_AMOUNT_FOR_FLASHCARDS}
+          title='Nagroda za przerobienie działu'
+        />
+      )}
     </div>
   );
 };

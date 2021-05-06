@@ -1,4 +1,10 @@
-import { login, logout, selectUser } from './app/features/auth/userSlice';
+import {
+  login,
+  logout,
+  selectUser,
+  selectUserInfo,
+  getUserGameProgress,
+} from './app/features/auth/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import './App.css';
@@ -19,14 +25,26 @@ import Board from './app/features/game/Board';
 import FlashCards from './app/features/game/FlashCards';
 import Matching from './app/features/game/Matching';
 import Test from './app/features/game/Test';
-import { selectGame } from './app/features/game/gameSlice';
+import {
+  selectGame,
+  getCurrentFlashCard,
+  getChapterWords,
+  selectChapter,
+  getCurrentLearningState,
+} from './app/features/game/gameSlice';
 import Memory from './app/features/game/memory/Memory';
+import Shop from './app/features/game/shop/Shop';
+import Vocabulary from './app/features/game/Vocabulary';
+import { useLocationChange } from './custom_hooks';
+import { updateLearning } from './app/features/db/updateUser';
+import { getUserInfo } from './app/features/db/getUser';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     minHeight: '100vh',
     width: '100%',
     background: '#eee',
+    zIndex: '1',
   },
 
   loadingCircle: {
@@ -48,9 +66,20 @@ theme = responsiveFontSizes(theme);
 
 function App() {
   const user = useSelector(selectUser);
+  const userInfo = useSelector(selectUserInfo);
   const game = useSelector(selectGame);
   const dispatch = useDispatch();
   const classes = useStyles();
+  const length =
+    game.selectedChapterIndex === ''
+      ? ''
+      : Object.keys(game.vocabulary[game.selectedChapterIndex].value).length;
+  const chapter =
+    game.selectedChapterIndex === ''
+      ? null
+      : userInfo.learning[
+          Object.keys(userInfo.learning)[game.selectedChapterIndex]
+        ];
 
   const isLogged = async () => {
     auth.onAuthStateChanged((userAuth) => {
@@ -74,6 +103,23 @@ function App() {
     isLogged();
   }, [dispatch]);
 
+  useLocationChange((location, prevLocation) => {
+    if (location === '/' && prevLocation === '/flashcards') {
+      if (chapter.fiszki < ((game.currentFlashCard + 1) / length) * 100) {
+        updateLearning(
+          user.uid,
+          Object.keys(userInfo.learning)[game.selectedChapterIndex],
+          'fiszki',
+          Math.round(((game.currentFlashCard + 1) / length) * 100)
+        );
+      }
+      dispatch(getCurrentFlashCard(0));
+      dispatch(getChapterWords(null));
+      dispatch(getCurrentLearningState(false));
+      dispatch(selectChapter(''));
+    }
+  });
+
   const toggleSideBarHandler = () => {
     dispatch(toggleDict());
   };
@@ -96,6 +142,12 @@ function App() {
     return (
       <div className={classes.root}>
         <Navigation onDictOpen={toggleSideBarHandler} />
+        <Vocabulary
+          open={game.isDictOpen}
+          onOpen={toggleSideBarHandler}
+          onClose={toggleSideBarHandler}
+          allVocabulary={game.vocabulary}
+        />
         <Switch>
           <Route exact path='/'>
             <Main onDictOpen={toggleSideBarHandler} />
@@ -106,6 +158,7 @@ function App() {
                 items={game.vocabulary[game.selectedChapterIndex]}
                 cardIndex={game.currentFlashCard}
                 state={game.isChapterFinished}
+                chapterIndex={game.selectedChapterIndex}
               />
             </Board>
           </Route>
@@ -119,16 +172,21 @@ function App() {
           </Route>
           <Route exact path='/test'>
             <Board>
-              <Test
-                items={game.vocabulary[game.selectedChapterIndex]}
-              />
+              <Test items={game.vocabulary[game.selectedChapterIndex]} />
             </Board>
           </Route>
           <Route exact path='/memory'>
-              <Board>
-                <Memory items={game.vocabulary[game.selectedChapterIndex]}></Memory>
-              </Board>
-            </Route>
+            <Board>
+              <Memory
+                items={game.vocabulary[game.selectedChapterIndex]}
+              ></Memory>
+            </Board>
+          </Route>
+          <Route exact path='/shop'>
+            <Board>
+              <Shop />
+            </Board>
+          </Route>
           <Redirect to='/' />
         </Switch>
       </div>

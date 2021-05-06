@@ -76,7 +76,7 @@ const GameTypeCard = (props) => {
         </Typography>
       </CardContent>
       <div className={classes.barContainer}>
-        <ChapterProgressBar />
+        <ChapterProgressBar fill={props.progress} />
       </div>
 
       <CardActions>

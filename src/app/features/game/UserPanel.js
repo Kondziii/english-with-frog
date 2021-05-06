@@ -1,4 +1,5 @@
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Grow from '@material-ui/core/Grow';
 import Paper from '@material-ui/core/Paper';
@@ -9,14 +10,16 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useState, useRef, useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import { useSelector } from 'react-redux';
-import { selectUser } from '../auth/userSlice';
+import { selectUser, selectUserInfo } from '../auth/userSlice';
 import { auth } from '../../firebase';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import { GetMoney } from '../db/getUser';
+import coinIcon from '../../../assets/images/coinIcon.png';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
     zIndex: '2',
   },
   paper: {
@@ -29,7 +32,8 @@ const UserPanel = () => {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
   const user = useSelector(selectUser);
-  const money = GetMoney(user.uid)
+  const userInfo = useSelector(selectUserInfo);
+  // const money = GetMoney(user.uid)
 
   const logout = () => {
     auth.signOut();
@@ -66,8 +70,14 @@ const UserPanel = () => {
 
   return (
     <div className={classes.root}>
+      <img
+        style={{ height: '1.3rem', marginRight: '10%' }}
+        src={coinIcon}
+      ></img>
+      <Typography style={{ marginRight: '30%', fontSize: '1.3rem' }}>
+        {userInfo.money}
+      </Typography>
       <div>
-        <Button disabled={true}>{money}</Button>
         <Button
           ref={anchorRef}
           aria-controls={open ? 'menu-list-grow' : undefined}
@@ -82,6 +92,7 @@ const UserPanel = () => {
           role={undefined}
           transition
           disablePortal
+          style={{ zIndex: '10' }}
         >
           {({ TransitionProps, placement }) => (
             <Grow
@@ -99,7 +110,7 @@ const UserPanel = () => {
                     onKeyDown={handleListKeyDown}
                   >
                     <MenuItem onClick={logout}>
-                      <ExitToAppIcon />
+                      <ExitToAppIcon style={{ marginRight: '2px' }} />
                       Wyloguj
                     </MenuItem>
                   </MenuList>

@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core';
 import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectChapter } from './gameSlice';
+import { selectChapter, getChapterWords } from './gameSlice';
 import { selectGame } from './gameSlice';
 import GameTypeList from './GameTypeList';
 import GameBoardTitle from './GameBoardTitle';
@@ -86,6 +86,7 @@ const Learn = (props) => {
 
   const chapterChangeHandler = (e) => {
     dispatch(selectChapter(e.target.value));
+    dispatch(getChapterWords(game.vocabulary[e.target.value]));
   };
 
   return (

@@ -1,27 +1,16 @@
-import { makeStyles } from '@material-ui/core/styles';
-import { Paper } from '@material-ui/core';
 import React, { useEffect } from 'react';
-import Vocabulary from './Vocabulary';
 import { database } from '../../firebase';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchVocabulary, selectGame, toggleDict } from './gameSlice';
-import Navigation from './Navigation';
+import { fetchVocabulary, selectGame, selectChapter } from './gameSlice';
 import Board from './Board';
 import Learn from './Learn';
-
-const useStyles = makeStyles((theme) => ({
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-  },
-}));
+import { getUserInfo } from '../db/getUser';
+import { getUserGameProgress, selectUser } from '../auth/userSlice';
 
 const Main = (props) => {
-  const classes = useStyles();
   const dispatch = useDispatch();
   const game = useSelector(selectGame);
+  const user = useSelector(selectUser);
 
   const getRef = async () => {
     return database.ref('database/vocabulary');
@@ -37,16 +26,16 @@ const Main = (props) => {
         dispatch(fetchVocabulary(vocabularylist));
       });
     });
+
+    dispatch(selectChapter(''));
+
+    getUserInfo(user.uid).then((userInfo) => {
+      dispatch(getUserGameProgress(userInfo));
+    });
   }, []);
 
   return (
     <>
-      <Vocabulary
-        open={game.isDictOpen}
-        onOpen={props.onDictOpen}
-        onClose={props.onDictOpen}
-        allVocabulary={game.vocabulary}
-      />
       <Board game={game}>
         <Learn />
       </Board>
