@@ -75,7 +75,7 @@ const UserPanel = () => {
         src={coinIcon}
       ></img>
       <Typography style={{ marginRight: '30%', fontSize: '1.3rem' }}>
-        {userInfo.money}
+        {userInfo && userInfo.money}
       </Typography>
       <div>
         <Button
