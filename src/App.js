@@ -18,7 +18,7 @@ import { useLayoutEffect } from 'react';
 import Main from './app/features/game/Main';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { toggleDict } from './app/features/game/gameSlice';
+import { getPairsNumber, toggleDict } from './app/features/game/gameSlice';
 import Navigation from './app/features/game/Navigation';
 import { makeStyles } from '@material-ui/core/styles';
 import Board from './app/features/game/Board';
@@ -118,6 +118,21 @@ function App() {
       dispatch(getCurrentLearningState(false));
       dispatch(selectChapter(''));
     }
+
+    if (location === '/' && prevLocation === '/matching') {
+      if (chapter.dopasowywanie < (game.pairsNum / length) * 100) {
+        updateLearning(
+          user.uid,
+          Object.keys(userInfo.learning)[game.selectedChapterIndex],
+          'dopasowywanie',
+          Math.round((game.pairsNum / length) * 100)
+        );
+      }
+      dispatch(getPairsNumber(null));
+      dispatch(getChapterWords(null));
+      dispatch(getCurrentLearningState(false));
+      dispatch(selectChapter(''));
+    }
   });
 
   const toggleSideBarHandler = () => {
@@ -167,6 +182,7 @@ function App() {
               <Matching
                 items={game.vocabulary[game.selectedChapterIndex]}
                 state={game.isChapterFinished}
+                chapterIndex={game.selectedChapterIndex}
               />
             </Board>
           </Route>

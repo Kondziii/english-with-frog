@@ -107,6 +107,13 @@ const GameTypeList = () => {
           description={LEARN_TYPES[1].description}
           btnLabel={LEARN_TYPES[1].btnLabel}
           onStart={matchingHandler}
+          progress={
+            game.selectedChapterIndex === ''
+              ? null
+              : userInfo.learning[
+                  Object.keys(userInfo.learning)[game.selectedChapterIndex]
+                ].dopasowywanie
+          }
         />
       </Grid>
       <Grid item xs={12} sm={6} lg={3}>

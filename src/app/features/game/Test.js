@@ -23,7 +23,7 @@ import { addMoney, updateTests } from '../db/updateUser';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    height: '90vh',
+    height: '87vh',
     width: '100%',
     position: 'relative',
   },

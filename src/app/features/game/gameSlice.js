@@ -12,6 +12,11 @@ export const gameSlice = createSlice({
     chapterWords: [],
     currentFlashCard: 0,
     isChapterFinished: false,
+    matching: {
+      first: null,
+      second: null,
+    },
+    pairsNum: null,
   },
   reducers: {
     fetchVocabulary: (state, action) => {
@@ -49,6 +54,18 @@ export const gameSlice = createSlice({
     getCurrentLearningState: (state, action) => {
       state.isChapterFinished = action.payload;
     },
+
+    getFirstWord: (state, action) => {
+      state.matching.first = action.payload;
+    },
+
+    getSecondWord: (state, action) => {
+      state.matching.second = action.payload;
+    },
+
+    getPairsNumber: (state, action) => {
+      state.pairsNum = action.payload;
+    },
   },
 });
 
@@ -63,6 +80,9 @@ export const {
   getChapterWords,
   getCurrentFlashCard,
   getCurrentLearningState,
+  getFirstWord,
+  getSecondWord,
+  getPairsNumber,
 } = gameSlice.actions;
 
 export const selectGame = (state) => state.game;
