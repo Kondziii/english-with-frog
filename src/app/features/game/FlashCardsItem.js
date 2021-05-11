@@ -82,7 +82,7 @@ const FlashCardsItem = (props) => {
   };
 
   const confirmHandler = () => {
-    if (enteredWord && enteredWord.toLocaleLowerCase() === props.englishWord) {
+    if (enteredWord && enteredWord.toLocaleLowerCase() === props.englishWord.toLocaleLowerCase()) {
       setWordError(false);
       setIsCorrect(true);
     } else {

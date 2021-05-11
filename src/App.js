@@ -37,7 +37,6 @@ import Shop from './app/features/game/shop/Shop';
 import Vocabulary from './app/features/game/Vocabulary';
 import { useLocationChange } from './custom_hooks';
 import { updateLearning } from './app/features/db/updateUser';
-import { getUserInfo } from './app/features/db/getUser';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -135,6 +134,8 @@ function App() {
     }
   });
 
+
+
   const toggleSideBarHandler = () => {
     dispatch(toggleDict());
   };
@@ -188,7 +189,10 @@ function App() {
           </Route>
           <Route exact path='/test'>
             <Board>
-              <Test items={game.vocabulary[game.selectedChapterIndex]} />
+              <Test 
+              items={game.vocabulary[game.selectedChapterIndex]}
+              chapterIndex={game.selectedChapterIndex}
+              />
             </Board>
           </Route>
           <Route exact path='/memory'>

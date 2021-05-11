@@ -8,6 +8,7 @@ import { selectGame } from './gameSlice';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
 import { selectUserInfo } from '../auth/userSlice';
+import constants from '../../../const';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -130,6 +131,13 @@ const GameTypeList = () => {
           description={LEARN_TYPES[3].description}
           btnLabel={LEARN_TYPES[3].btnLabel}
           onStart={testHandler}
+          progress={
+            game.selectedChapterIndex === ''
+              ? null
+              : ((userInfo.learning[
+                  Object.keys(userInfo.learning)[game.selectedChapterIndex]
+                ].test / constants.CONST_TEST_LENGTH) * 100)
+          }
         />
       </Grid>
     </Grid>

@@ -17,6 +17,7 @@ export const gameSlice = createSlice({
       second: null,
     },
     pairsNum: null,
+    testResult: 0,
   },
   reducers: {
     fetchVocabulary: (state, action) => {
@@ -66,6 +67,11 @@ export const gameSlice = createSlice({
     getPairsNumber: (state, action) => {
       state.pairsNum = action.payload;
     },
+
+    getTestResult: (state, action) => {
+      state.testResult = action.payload;
+    },
+
   },
 });
 
@@ -83,6 +89,7 @@ export const {
   getFirstWord,
   getSecondWord,
   getPairsNumber,
+  getTestResult,
 } = gameSlice.actions;
 
 export const selectGame = (state) => state.game;

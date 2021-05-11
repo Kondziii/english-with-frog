@@ -9,21 +9,25 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch } from 'react-redux';
-import { getChapterWords } from './gameSlice';
+import { getTestResult } from './gameSlice';
 import { useEffect } from 'react';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import shuffle from 'shuffle-array';
-import { selectUser } from '../auth/userSlice';
+import {   
+  selectUser,
+  selectUserInfo,
+  updateMoneyState,
+} from '../auth/userSlice';
+import EndDialog from './EndDialog';
+import { addMoney, updateLearning } from '../db/updateUser';
 import { useSelector } from 'react-redux';
-import { addMoney, updateTests } from '../db/updateUser';
-// import { GetTests } from '../db/getUser';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    height: '87vh',
+    height: '90vh',
     width: '100%',
     position: 'relative',
   },
@@ -91,15 +95,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Test = (props) => {
-  const history = useHistory();
   const classes = useStyles();
   const dispatch = useDispatch();
+  const history = useHistory();
+  const userInfo = useSelector(selectUserInfo);
   const user = useSelector(selectUser);
-  const [isStart, setIsStart] = useState(false);
   const [isEnd, setIsEnd] = useState(false);
-  const [score, setScore] = useState(0);
+  const [testResult, setTestResult] = useState(0);
+  const [reward, setReward] = useState(0);
   const [finalArray, setFinalArray] = useState([]);
-  // const getTestResult = GetTests(user.uid, props.items.key);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  
 
   const testWords = shuffle.pick(
     Object.entries(props.items.value).flatMap(([key, value]) => {
@@ -117,30 +123,37 @@ const Test = (props) => {
   const firstWords = testWords.splice(0, 7);
   const secondWords = testWords.splice(-7);
 
-  useEffect(() => {
-    dispatch(getChapterWords(props.items.value));
-  });
-
-  const startTestHandler = () => {
-    setIsEnd(true);
-  };
-
   const endTestHandler = () => {
     setFinalArray(points);
     var s = 0;
 
     for (let word in points) {
       s += points[word].point;
-      setScore(s);
+      setTestResult(s);
     }
-
-    // if (getTestResult < s) {
-    //   addMoney(user.uid, s * 10);
-    //   updateTests(user.uid, props.items.key, s);
-    // }
 
     setIsEnd(true);
   };
+
+  useEffect(() => {
+    let prevResult = userInfo.learning[Object.keys(userInfo.learning)[props.chapterIndex]].test
+    
+    if (isEnd) { 
+      if (prevResult < testResult)
+        {
+          setReward(((testResult - prevResult) * 10));
+          updateLearning(user.uid, props.items.key, 'test', testResult);
+          dispatch(
+            updateMoneyState(
+              userInfo.money + ((testResult - prevResult) * 10))
+          );
+          addMoney(user.uid, ((testResult - prevResult) * 10));
+          dispatch(getTestResult(testResult));
+          setIsDialogOpen(true);
+        }
+      }    
+    
+  }, [isEnd]); 
 
   const backToMenuHandler = () => {
     history.push('/');
@@ -243,8 +256,8 @@ const Test = (props) => {
                           value={word.value}
                           InputProps={{
                             readOnly: true,
+                            classes: { input: classes.resizeTextBox },
                           }}
-                          className={classes.resizeTextBox}
                           color='secondary'
                         />
                       </ListItem>
@@ -257,7 +270,9 @@ const Test = (props) => {
                           onChange={(e) =>
                             check(e.target.value, word.key, false)
                           }
-                          className={classes.resizeTextBox}
+                          InputProps={{
+                            classes: { input: classes.resizeTextBox },
+                          }}
                         />
                       </ListItem>
                     ))}
@@ -270,7 +285,7 @@ const Test = (props) => {
             <Grid item>
               <Typography className={classes.taskHeader} variant='h4'>
                 Uzyskany wynik:{' '}
-                <span style={{ fontWeight: 'bold' }}>{score}</span>
+                <span style={{ fontWeight: 'bold' }}>{testResult}</span>
                 /14
               </Typography>
               <Typography className={classes.taskHeader} variant='h6'>
@@ -376,6 +391,15 @@ const Test = (props) => {
           </Button>
         )}
       </Grid>
+      {isDialogOpen && (
+        <EndDialog
+          description='Gratulacje, udało ci się polepszyć wynik z testu, jako nagrodę
+          otrzymujesz trochę monet, które możesz wydać na ulepszanie swojego
+          żabiego awatara.'
+          btnTitle='ok, rozumiem'
+          coinsAmount={reward}
+        />
+      )}
     </div>
   );
 };
