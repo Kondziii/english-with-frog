@@ -2,13 +2,12 @@ import { Grid } from '@material-ui/core';
 import GameTypeCard from './GameTypeCard';
 import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch } from 'react-redux';
-import { openFlashCards, openMatching, openTest } from './gameSlice';
+import { openFlashCards, openMatching, openTest, selectGame } from '../../gameSlice';
 import { useSelector } from 'react-redux';
-import { selectGame } from './gameSlice';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
-import { selectUserInfo } from '../auth/userSlice';
-import constants from '../../../const';
+import { selectUserInfo } from '../../../auth/userSlice';
+import constants from '../../../../../const';
 
 const useStyles = makeStyles((theme) => ({
   root: {

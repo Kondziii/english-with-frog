@@ -19,12 +19,12 @@ import Main from './app/features/game/Main';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { getPairsNumber, toggleDict } from './app/features/game/gameSlice';
-import Navigation from './app/features/game/Navigation';
+import Navigation from './app/features/game/navigation/Navigation';
 import { makeStyles } from '@material-ui/core/styles';
-import Board from './app/features/game/Board';
-import FlashCards from './app/features/game/FlashCards';
-import Matching from './app/features/game/Matching';
-import Test from './app/features/game/Test';
+import Board from './app/features/game/composition/Board';
+import FlashCards from './app/features/game/learn/activities/flashCards/FlashCards';
+import Matching from './app/features/game/learn/activities/maching/Matching';
+import Test from './app/features/game/learn/activities/quiz/Test';
 import {
   selectGame,
   getCurrentFlashCard,
@@ -32,9 +32,9 @@ import {
   selectChapter,
   getCurrentLearningState,
 } from './app/features/game/gameSlice';
-import Memory from './app/features/game/memory/Memory';
+import Memory from './app/features/game/learn/activities/memory/Memory';
 import Shop from './app/features/game/shop/Shop';
-import Vocabulary from './app/features/game/Vocabulary';
+import Vocabulary from './app/features/game/dictionary/Vocabulary';
 import { useLocationChange } from './custom_hooks';
 import { updateLearning } from './app/features/db/updateUser';
 

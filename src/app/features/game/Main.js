@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { database } from '../../firebase';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchVocabulary, selectGame, selectChapter } from './gameSlice';
-import Board from './Board';
-import Learn from './Learn';
+import Board from './composition/Board';
+import Learn from './learn/Learn';
 import { getUserInfo } from '../db/getUser';
 import { getUserGameProgress, selectUser } from '../auth/userSlice';
 

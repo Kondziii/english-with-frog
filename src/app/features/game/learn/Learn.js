@@ -9,10 +9,9 @@ import {
 } from '@material-ui/core';
 import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectChapter, getChapterWords } from './gameSlice';
-import { selectGame } from './gameSlice';
-import GameTypeList from './GameTypeList';
-import GameBoardTitle from './GameBoardTitle';
+import { selectChapter, getChapterWords, selectGame } from '../gameSlice';
+import GameTypeList from './activities/GameTypeList';
+import GameBoardTitle from './activities/GameBoardTitle';
 
 const useStyles = makeStyles(() => ({
   root: {

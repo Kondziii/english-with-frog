@@ -8,7 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
-import coinIcon from '../../../assets/images/coinIcon.png';
+import coinIcon from '../../../../../assets/images/coinIcon.png';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {

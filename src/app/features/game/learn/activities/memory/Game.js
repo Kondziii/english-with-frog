@@ -8,9 +8,9 @@ import GridListTile from '@material-ui/core/GridListTile';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import _ from 'underscore';
-import {addMoney} from '../../db/updateUser';
+import {addMoney} from '../../../../db/updateUser';
 import { useSelector } from 'react-redux';
-import { selectUser } from '../../auth/userSlice';
+import { selectUser } from '../../../../auth/userSlice';
 import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
 
 const useStyles = makeStyles((theme) => ({

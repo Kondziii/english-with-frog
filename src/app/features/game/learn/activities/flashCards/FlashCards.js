@@ -14,17 +14,17 @@ import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import { useState } from 'react';
-import { getCurrentFlashCard, getCurrentLearningState } from './gameSlice';
+import { getCurrentFlashCard, getCurrentLearningState } from '../../../gameSlice';
 import { useHistory } from 'react-router-dom';
 import {
   selectUserInfo,
   selectUser,
   updateMoneyState,
-} from '../auth/userSlice';
+} from '../../../../auth/userSlice';
 import { useSelector } from 'react-redux';
-import EndDialog from './EndDialog';
-import constants from '../../../const';
-import { addMoney } from '../db/updateUser';
+import EndDialog from '../EndDialog';
+import constants from '../../../../../../const';
+import { addMoney } from '../../../../db/updateUser';
 
 const useStyles = makeStyles((theme) => ({
   root: {

@@ -10,10 +10,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useState, useRef, useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import { useSelector } from 'react-redux';
-import { selectUser, selectUserInfo } from '../auth/userSlice';
-import { auth } from '../../firebase';
+import { selectUser, selectUserInfo } from '../../../auth/userSlice';
+import { auth } from '../../../../firebase';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import coinIcon from '../../../assets/images/coinIcon.png';
+import coinIcon from '../../../../../assets/images/coinIcon.png';
 
 const useStyles = makeStyles((theme) => ({
   root: {
