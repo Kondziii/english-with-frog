@@ -1,5 +1,6 @@
 import React from 'react';
 import { Grid, Paper, Typography } from '@material-ui/core';
+import Avatar from './Avatar';
 
 const GameContainer = (props) => {
   return (
@@ -11,7 +12,7 @@ const GameContainer = (props) => {
       </Grid>
       <Grid elevation={3} item xs={12} md={4}>
         <Paper>
-          <Typography variant='h2'> Zaba here</Typography>
+          <Avatar/>
         </Paper>
       </Grid>
     </Grid>

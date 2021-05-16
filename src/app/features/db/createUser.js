@@ -7,8 +7,21 @@ export const createUser = (id) => {
         money: 0,
         frogstage: 1,
         items: {
-            item1: 0,
-            item2: 0
+            skin: {
+                1: 1,
+                2: 0,
+                3: 0
+            },
+            backdround: {
+                1: 1,
+                2: 0,
+                3: 0
+            },
+            clothes: {
+                1: 0,
+                2: 0,
+                3: 0
+            }
         },
         learning: {
             animals: {

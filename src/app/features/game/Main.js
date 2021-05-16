@@ -1,7 +1,12 @@
 import React, { useEffect } from 'react';
 import { database } from '../../firebase';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchVocabulary, selectGame, selectChapter } from './gameSlice';
+import { 
+  fetchVocabulary, 
+  selectGame, 
+  selectChapter, 
+  fetchShop, 
+  fetchFrogStateImage } from './gameSlice';
 import Board from './composition/Board';
 import Learn from './learn/Learn';
 import { getUserInfo } from '../db/getUser';
@@ -14,6 +19,14 @@ const Main = (props) => {
 
   const getRef = async () => {
     return database.ref('database/vocabulary');
+  };
+
+  const getShop = async () => {
+    return database.ref('database/shop');
+  };
+
+  const getFrogRef = async () => {
+    return database.ref('database/frogState')
   };
 
   useEffect(() => {
@@ -32,6 +45,38 @@ const Main = (props) => {
     getUserInfo(user.uid).then((userInfo) => {
       dispatch(getUserGameProgress(userInfo));
     });
+    
+    getShop().then((shop) => {
+      shop.on('value', (snapshot) => {
+        let shopItems = [];
+        snapshot.forEach((snap) => {
+          let items = []
+          snap.forEach((item) => {
+            let arg = []
+            item.forEach((a) => {
+              arg.push({ key: a.key, value: a.val()})
+            });
+            items.push({ key: item.key, value: arg})
+          });
+          shopItems.push({ key: snap.key, value: items });
+        });
+        dispatch(fetchShop(shopItems));
+      });
+    });
+    
+    getFrogRef().then((allstates) => {
+      allstates.on('value', (snapshot) => {
+        let iter = 1;
+        let statelist = [];
+        snapshot.forEach((snap) => {
+          statelist.push({ key: iter, value: snap.val() });
+          // statelist.push({ key: snap.key, value: snap.val() });
+          iter = iter + 1;
+        });
+        dispatch(fetchFrogStateImage(statelist));
+      });
+    });
+
   }, []);
 
   return (

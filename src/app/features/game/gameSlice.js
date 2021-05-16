@@ -4,6 +4,8 @@ export const gameSlice = createSlice({
   name: 'game',
   initialState: {
     vocabulary: [],
+    shop: [],
+    frogStateImage: [],
     isDictOpen: false,
     isFlashCardsOpen: false,
     isMatchingOpen: false,
@@ -72,6 +74,14 @@ export const gameSlice = createSlice({
       state.testResult = action.payload;
     },
 
+    fetchShop: (state, action) => {
+      state.shop = action.payload;
+    },
+
+    fetchFrogStateImage: (state, action) => {
+      state.frogStateImage = action.payload;
+    },
+
   },
 });
 
@@ -90,6 +100,8 @@ export const {
   getSecondWord,
   getPairsNumber,
   getTestResult,
+  fetchShop,
+  fetchFrogStateImage,
 } = gameSlice.actions;
 
 export const selectGame = (state) => state.game;
