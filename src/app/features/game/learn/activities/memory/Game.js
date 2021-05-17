@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     card : {
         // width: '10vw',
         // height: '15vh',
-        width: '180px',
+        width: '160px',
         height: '120px',
         border: '2px solid white',     
         display: 'flex',
@@ -84,15 +84,15 @@ const Game = (props) => {
           return 4;
         }
         if (isWidthUp('lg', props.width)) {
-          return 3;
+          return 4;
         }
         if (isWidthUp('md', props.width)) {
-          return 2;
+          return 3;
         }
         if (isWidthUp('sm', props.width)) {
-          return 2;
+          return 3;
         }
-        return 1;
+        return 3;
       };
     
       const getCellHeight = () => {

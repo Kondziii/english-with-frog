@@ -16,10 +16,12 @@ export const userSlice = createSlice({
     getUserGameProgress: (state, action) => {
       state.info = action.payload;
     },
-
     updateMoneyState: (state, action) => {
       state.info.money = action.payload;
     },
+    updateFrogstage: (state) => {
+      state.info.frogstage = state.info.frogstage + 1;
+    }
   },
 });
 
@@ -29,6 +31,7 @@ export const {
   logout,
   getUserGameProgress,
   updateMoneyState,
+  updateFrogstage,
 } = userSlice.actions;
 
 export const selectUser = (state) => state.user.user;

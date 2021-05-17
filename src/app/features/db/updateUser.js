@@ -7,12 +7,12 @@ const updateMoney = (id, val) => {
     database.ref('/database/users/' + id + '/money').set(val);
 }
 
-const updateFrogstage = (id, val) => {
-    database.ref('/database/users/' + id + '/frogstate').set(val);
+const updateFrogstageDB = (id, val) => {
+    database.ref('/database/users/' + id + '/frogstage').set(val);
 }
 
-const updateItems = (id, item, val) => {
-    database.ref('/database/users/' + id + '/items/' + item).set(val);
+const updateItems = (id, itemType, item, val) => {
+    database.ref('/database/users/' + id + '/items/' + itemType + '/' + item).set(val);
 }
 
 
@@ -30,4 +30,4 @@ const upgradeFrogOnce = (id) => {
     .set(firebase.database.ServerValue.increment(1));
 }
 
-export { updateMoney, updateFrogstage, updateItems, updateLearning, addMoney, upgradeFrogOnce };
+export { updateMoney, updateFrogstageDB, updateItems, updateLearning, addMoney, upgradeFrogOnce };
