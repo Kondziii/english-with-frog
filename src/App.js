@@ -138,7 +138,6 @@ function App() {
         let statelist = [];
         snapshot.forEach((snap) => {
           statelist.push({ key: iter, value: snap.val() });
-          // statelist.push({ key: snap.key, value: snap.val() });
           iter = iter + 1;
         });
         dispatch(fetchFrogStateImage(statelist));

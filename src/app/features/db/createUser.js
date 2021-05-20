@@ -6,6 +6,11 @@ export const createUser = (id) => {
     database.ref('/database/users/' + id).set({
         money: 0,
         frogstage: 1,
+        chosenItems: {
+            skin: 1,
+            background: 1,
+            clothes: null,
+        },
         items: {
             skin: {
                 1: 1,

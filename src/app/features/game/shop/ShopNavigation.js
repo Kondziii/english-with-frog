@@ -2,8 +2,9 @@ import React from 'react';
 import { makeStyles, createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import {
   FormControl,
-  ButtonGroup,
-  Button,
+  Tab,
+  Tabs,
+  AppBar
 } from '@material-ui/core';
 
 const theme = createMuiTheme({
@@ -21,19 +22,33 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '2vh',
     marginBottom: '2vh',
   },
+  nav: {
+    backgroundColor: 'green',
+    color: "white",
+    display: 'flex',
+    justifyContent: 'centre',
+    
+  },
+
 }));
 
-const ShopNavigation = () => {
+const ShopNavigation = (props) => {
   const classes = useStyles();
 
   return (
     <FormControl className={classes.root}>
         <ThemeProvider theme={theme}>
-            <ButtonGroup size="large" variant="contained" color="primary" aria-label="contained primary button group" fullWidth={true}>
-                <Button>Żaby</Button>
-                <Button>Tło</Button>
-                <Button>Ciuszki</Button>
-            </ButtonGroup>      
+            <AppBar className={classes.nav} position="static" color="default">
+            <Tabs 
+              value={props.section}
+              indicatorColor="secondary"
+              onChange={props.handler}
+            >    
+              <Tab label="Tło" value={Object.keys(props.shop)[0] }/>
+              <Tab label="Ciuszki" value={Object.keys(props.shop)[1]}/>
+              <Tab label="Żabcia" value={Object.keys(props.shop)[2]} />
+            </Tabs>
+            </AppBar>
         </ThemeProvider>
     </FormControl> 
   );

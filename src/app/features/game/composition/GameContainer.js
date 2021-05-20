@@ -1,6 +1,6 @@
 import React from 'react';
 import { Grid, Paper, Typography } from '@material-ui/core';
-import Avatar from './Avatar';
+import Avatar from './Avatar/Avatar';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserGameProgress, selectUserInfo, selectUser } from '../../auth/userSlice';
 

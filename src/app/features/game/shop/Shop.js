@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-  Button,
   FormControl,
   Grid,
-  Typography
 } from '@material-ui/core';
 import ShopNavigation from './ShopNavigation';
 import ItemList from './ItemsList';
@@ -31,6 +29,19 @@ const Shop = () => {
   const userInfo = useSelector(selectUserInfo);
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
+  const [section, setSection] = useState("0")
+  
+  const sectionHandler = (event, value) => {
+    setSection(value);
+  }
+
+
+  const [value, setValue] = React.useState("0");
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+    console.log(value);
+  };
 
   return (
     <FormControl className={classes.root}>
@@ -42,10 +53,10 @@ const Shop = () => {
         { userInfo && userInfo.frogstage < constants.CONST_FROG_STGES &&
         <Evolve/>}
         <Grid>
-          <ShopNavigation></ShopNavigation>
+          <ShopNavigation handler={sectionHandler} shop={game.shop} section={section}></ShopNavigation>
         </Grid> 
         <Grid>
-          <ItemList></ItemList>
+          { game && <ItemList section={game.shop[section].value}></ItemList> }
         </Grid>
       </Grid>
     </FormControl>    
