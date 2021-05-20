@@ -42,7 +42,7 @@ const Memory = (props) => {
                         <span style={{ fontWeight: 'bold' }}>{props.items.key}</span>
                     </Typography>
                     <Grid item>
-                        <Game words={props.items.value} array={wordsArray}></Game>
+                        <Game words={props.items.value} array={wordsArray} chapterIndex={props.chapterIndex} items={props.items}></Game>
                     </Grid>
                 
                 </Grid>

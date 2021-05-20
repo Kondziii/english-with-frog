@@ -249,6 +249,8 @@ function App() {
             <Board>
               <Memory
                 items={game.vocabulary[game.selectedChapterIndex]}
+                state={game.isChapterFinished}
+                chapterIndex={game.selectedChapterIndex}
               ></Memory>
             </Board>
           </Route>

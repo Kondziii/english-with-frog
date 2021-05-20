@@ -122,6 +122,13 @@ const GameTypeList = () => {
           description={LEARN_TYPES[2].description}
           btnLabel={LEARN_TYPES[2].btnLabel}
           onStart={memoryHandler}
+          progress={
+            game.selectedChapterIndex === ''
+              ? null
+              : userInfo.learning[
+                  Object.keys(userInfo.learning)[game.selectedChapterIndex]
+                ].memory
+          }
         />
       </Grid>
       <Grid item xs={12} sm={6} lg={3}>

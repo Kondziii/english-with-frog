@@ -1,6 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
 import React, {useEffect, useState} from 'react';
 import Typography from '@material-ui/core/Typography';
 import GridList from '@material-ui/core/GridList';
@@ -8,10 +9,18 @@ import GridListTile from '@material-ui/core/GridListTile';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import _ from 'underscore';
-import {addMoney} from '../../../../db/updateUser';
+import {addMoney, updateLearning} from '../../../../db/updateUser';
 import { useSelector } from 'react-redux';
-import { selectUser } from '../../../../auth/userSlice';
 import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
+import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
+import { useHistory } from 'react-router-dom';
+import constants from '../../../../../../const';
+import {
+    selectUser,
+    selectUserInfo,
+    updateMoneyState,
+  } from '../../../../auth/userSlice';
+  import EndDialog from '../EndDialog';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -55,16 +64,22 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexWrap: 'wrap',
     },
+    gridList: {
+        justifyContent: 'center',
+        display: 'flex',
+    },
   }));
 
 const Game = (props) => {
     const user = useSelector(selectUser);
+    const userInfo = useSelector(selectUserInfo);
     const classes = useStyles();
+    const history = useHistory();
 
     let cards = [];
     const [points, setPoints] = useState(0);
     const [isEnded, setIsEnded] = useState(false);
-    // const startTime = performance.now();
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
 
 
     useEffect (() => {
@@ -75,9 +90,21 @@ const Game = (props) => {
 
     useEffect (() => {
         if(isEnded === true) {
-            addMoney(user.uid, (30));
+            if (
+                userInfo.learning[Object.keys(userInfo.learning)[props.chapterIndex]]
+                  .memory != 100 
+              ){
+                addMoney(user.uid, constants.COINS_AMOUNT_FOR_MEMORY);
+                updateMoneyState(userInfo.money + constants.COINS_AMOUNT_FOR_MEMORY)
+                updateLearning(user.uid, props.items.key, 'memory', 100);
+                setIsDialogOpen(true);
+              }           
         }
     }, [isEnded]) 
+
+    const backToMenuHandler = () => {
+        history.push('/');
+      };
 
     const getGridListCols = () => {
         if (isWidthUp('xl', props.width)) {
@@ -87,7 +114,7 @@ const Game = (props) => {
           return 4;
         }
         if (isWidthUp('md', props.width)) {
-          return 3;
+          return 4;
         }
         if (isWidthUp('sm', props.width)) {
           return 3;
@@ -183,7 +210,20 @@ const Game = (props) => {
                         </GridListTile>
                     ))}
                 </GridList>
-            </div>                    
+            </div>    
+            <Button className={classes.buttonStyleBack} onClick={backToMenuHandler}>
+                <ArrowLeftIcon />
+                Wróć do menu
+            </Button>    
+            {isDialogOpen && (
+                <EndDialog
+                description='Gratulacje, udało ci się zakończyć grę, jako nagrodę
+                otrzymujesz trochę monet, które możesz wydać na ulepszanie swojego
+                żabiego awatara.'
+                btnTitle='ok, rozumiem'
+                coinsAmount={constants.COINS_AMOUNT_FOR_MEMORY}
+                />
+            )}            
         </Grid>
     )
 }
