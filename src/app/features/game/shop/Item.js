@@ -7,6 +7,9 @@ import {
   Button,
   CardActions,
 } from '@material-ui/core';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectGame, fetchFrogStates, setCurrentFrogState } from '../gameSlice';
+import { selectUserInfo, selectUser, updateFrogstage, updateMoneyState } from '../../auth/userSlice';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -23,6 +26,14 @@ const useStyles = makeStyles(() => ({
 
 const Items = (props) => {
   const classes = useStyles();
+  const game = useSelector(selectGame);
+  const userInfo = useSelector(selectUserInfo);
+  const user = useSelector(selectUser);
+  const dispatch = useDispatch();
+
+  const buyItem = () => {
+    
+  }
 
   return (
     <Card className={classes.root}>
@@ -35,9 +46,13 @@ const Items = (props) => {
         image={props.image}
       />
     </CardActionArea>
-    <CardActions>        
-      <Button className={classes.button} size="large" color="primary">
+    <CardActions>     
+         
+      <Button className={classes.button} size="large" color="primary" onClick={buyItem()}>
         Kup {props.price}
+      </Button>
+      <Button className={classes.button} size="large" color="primary">
+        Wybierz
       </Button>
     </CardActions>
   </Card>  

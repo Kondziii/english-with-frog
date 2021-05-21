@@ -57,7 +57,6 @@ const ShopNavigation = () => {
   }, [userInfo.money]);
 
   const evolve = () => {
-    console.log(userInfo);
     dispatch(updateMoneyState(userInfo.money - constants.COINS_AMOUNT_FOR_EVOLUTION));
     updateMoney(user.uid, userInfo.money - constants.COINS_AMOUNT_FOR_EVOLUTION);
     dispatch(updateFrogstage());

@@ -9,7 +9,7 @@ export const createUser = (id) => {
         chosenItems: {
             skin: 1,
             background: 1,
-            clothes: null,
+            clothes: 0,
         },
         items: {
             skin: {
