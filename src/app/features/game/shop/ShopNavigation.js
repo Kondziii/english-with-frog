@@ -43,10 +43,10 @@ const ShopNavigation = (props) => {
               value={props.section}
               indicatorColor="secondary"
               onChange={props.handler}
-            >    
-              <Tab label="Tło" value={Object.keys(props.shop)[0] }/>
-              <Tab label="Ciuszki" value={Object.keys(props.shop)[1]}/>
-              <Tab label="Żabcia" value={Object.keys(props.shop)[2]} />
+            > 
+              <Tab label="Żabcia" value={props.shop[2].key} />
+              <Tab label="Tło" value={props.shop[0].key }/>
+              <Tab label="Ciuszki" value={props.shop[1].key}/>
             </Tabs>
             </AppBar>
         </ThemeProvider>

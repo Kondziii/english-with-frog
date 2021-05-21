@@ -29,19 +29,11 @@ const Shop = () => {
   const userInfo = useSelector(selectUserInfo);
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
-  const [section, setSection] = useState("0")
+  const [section, setSection] = useState("frogSkin")
   
   const sectionHandler = (event, value) => {
     setSection(value);
   }
-
-
-  const [value, setValue] = React.useState("0");
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-    console.log(value);
-  };
 
   return (
     <FormControl className={classes.root}>
@@ -52,12 +44,18 @@ const Shop = () => {
       alignItems="center">
         { userInfo && userInfo.frogstage < constants.CONST_FROG_STGES &&
         <Evolve/>}
-        <Grid>
-          <ShopNavigation handler={sectionHandler} shop={game.shop} section={section}></ShopNavigation>
-        </Grid> 
-        <Grid>
-          { game && <ItemList section={game.shop[section].value}></ItemList> }
-        </Grid>
+        { game && userInfo && userInfo.frogstage == constants.CONST_FROG_STGES &&
+          <Grid>
+            <ShopNavigation handler={sectionHandler} shop={game.shop} section={section}></ShopNavigation>
+          </Grid> }
+        { game && userInfo && userInfo.frogstage == constants.CONST_FROG_STGES &&
+          <Grid>
+            <ItemList 
+              section = {game.shop.filter( i => { return i.key == section } )[0].value}>
+              userItems = {userInfo.items[section]}
+              chosenItem = {userInfo.chosenItems[section]}
+            </ItemList> 
+          </Grid>}
       </Grid>
     </FormControl>    
   );

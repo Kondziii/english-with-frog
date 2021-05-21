@@ -7,17 +7,17 @@ export const createUser = (id) => {
         money: 0,
         frogstage: 1,
         chosenItems: {
-            skin: 1,
+            frogSkin: 1,
             background: 1,
             clothes: 0,
         },
         items: {
-            skin: {
+            frogSkin: {
                 1: 1,
                 2: 0,
                 3: 0
             },
-            backdround: {
+            background: {
                 1: 1,
                 2: 0,
                 3: 0

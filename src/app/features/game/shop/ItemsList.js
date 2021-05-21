@@ -33,11 +33,11 @@ const ItemsList = (props) => {
     if ( userInfo.frogstage < 5) {
       if (isWidthUp('xl', props.width)) {
         console.log('xl');
-        return 690;
+        return 600;
       }
       if (isWidthUp('lg', props.width)) {
         console.log('lg');
-        return 690;
+        return 590;
       }
       if (isWidthUp('md', props.width)) {
         console.log('md');
@@ -72,16 +72,25 @@ const ItemsList = (props) => {
     return 1;
   };
 
+  console.log(props.userItems);
+  console.log(props.chosenItem);
+
   return (
     <FormControl className={classes.root}>
       <GridList           
-        cellHeight={getShopHeight()}
-        cols={1}
-        className={classes.gridList}>
-        <GridList           
-          cellHeight='auto'
-          cols={getGridListCols()}
-          className={classes.gridList}>
+        cellHeight='auto'
+        cols={getGridListCols()}
+        className={classes.gridList}
+        >
+        {props.section.map((item) =>  (
+          <Grid>
+            <Item 
+              key={item.key} 
+              price={Object.values(Object.values(item)[1])[0].value}
+              image={Object.values(Object.values(item)[1])[1].value}>
+            </Item>          
+          </Grid>    
+          ))}
           {props.section.map((item) =>  (
             <Grid>
               <Item 
@@ -90,36 +99,26 @@ const ItemsList = (props) => {
                 image={Object.values(Object.values(item)[1])[1].value}>
               </Item>          
             </Grid>    
-          ))}  
-          {props.section.map((item) =>  (
-            <Grid>
-              <Item 
-                key={item.key} 
-                price={Object.values(Object.values(item)[1])[0].value}
-                image={Object.values(Object.values(item)[1])[1].value}>
-              </Item>          
-            </Grid>    
-          ))}  
-          {props.section.map((item) =>  (
-            <Grid>
-              <Item 
-                key={item.key} 
-                price={Object.values(Object.values(item)[1])[0].value}
-                image={Object.values(Object.values(item)[1])[1].value}>
-              </Item>          
-            </Grid>    
-          ))}   
-          {props.section.map((item) =>  (
-            <Grid>
-              <Item 
-                key={item.key} 
-                price={Object.values(Object.values(item)[1])[0].value}
-                image={Object.values(Object.values(item)[1])[1].value}>
-              </Item>          
-            </Grid>    
-          ))}         
+            ))}
+            {props.section.map((item) =>  (
+              <Grid>
+                <Item 
+                  key={item.key} 
+                  price={Object.values(Object.values(item)[1])[0].value}
+                  image={Object.values(Object.values(item)[1])[1].value}>
+                </Item>          
+              </Grid>    
+              ))}
+              {props.section.map((item) =>  (
+                <Grid>
+                  <Item 
+                    key={item.key} 
+                    price={Object.values(Object.values(item)[1])[0].value}
+                    image={Object.values(Object.values(item)[1])[1].value}>
+                  </Item>          
+                </Grid>    
+                ))}     
         </GridList>  
-      </GridList>     
     </FormControl>    
   );
 };

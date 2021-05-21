@@ -30,11 +30,11 @@ const useStyles = makeStyles((theme) => ({
 
   paper: {
     backgroundColor: 'lightgrey',
+    padding: '15px',
   },
 
   text: {
     textAlign: 'center',
-    padding: '15px',
   },
 
 }));
@@ -68,10 +68,17 @@ const ShopNavigation = () => {
         <ThemeProvider theme={theme}>
             <Paper className={classes.paper}>
                 <Typography variant="h5" className={classes.text}>
-                    Twoi mali przyjaciele są gotowi do rozwoju! Zbierz monety i wychoduj własną żabę!
-                    Aby kijanki przeszły ewolucję, potrzebujesz {constants.COINS_AMOUNT_FOR_EVOLUTION} monet.
-                    Powodzenia!
-                </Typography>                
+                  Twoi mali przyjaciele są gotowi do rozwoju!
+                </Typography> 
+                <Typography variant="h5" className={classes.text}>
+                  Chesz odblokować sklep? Zbierz monety i wychoduj własną żabę!
+                </Typography> 
+                <Typography variant="h5" className={classes.text}>
+                  Aby kijanki przeszły ewolucję, potrzebujesz {constants.COINS_AMOUNT_FOR_EVOLUTION} monet.
+                </Typography>
+                <Typography variant="h5" className={classes.text}>
+                  Powodzenia!
+                </Typography>
             </Paper>
             <Button 
             size="large" 
