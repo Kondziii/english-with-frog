@@ -72,9 +72,6 @@ const ItemsList = (props) => {
     return 1;
   };
 
-  console.log(props.userItems);
-  console.log(props.chosenItem);
-
   return (
     <FormControl className={classes.root}>
       <GridList           
@@ -83,41 +80,53 @@ const ItemsList = (props) => {
         className={classes.gridList}
         >
         {props.section.map((item) =>  (
-          <Grid>
+          <Grid key={item.key}>
             <Item 
               key={item.key} 
-              price={Object.values(Object.values(item)[1])[0].value}
-              image={Object.values(Object.values(item)[1])[1].value}>
+              price={item.value.filter( val => { return val.key == "price" })[0].value}
+              image={item.value.filter( val => { return val.key == "url" })[0].value}
+              bought={props.userItems[item.key]}
+              chosen={item.key == props.chosenItem}
+              >
             </Item>          
           </Grid>    
-          ))}
+          ))}   
           {props.section.map((item) =>  (
-            <Grid>
+            <Grid key={item.key}>
               <Item 
                 key={item.key} 
-                price={Object.values(Object.values(item)[1])[0].value}
-                image={Object.values(Object.values(item)[1])[1].value}>
+                price={item.value.filter( val => { return val.key == "price" })[0].value}
+                image={item.value.filter( val => { return val.key == "url" })[0].value}
+                bought={props.userItems[item.key]}
+                chosen={item.key == props.chosenItem}
+                >
               </Item>          
             </Grid>    
-            ))}
+            ))}   
             {props.section.map((item) =>  (
-              <Grid>
+              <Grid key={item.key}>
                 <Item 
                   key={item.key} 
-                  price={Object.values(Object.values(item)[1])[0].value}
-                  image={Object.values(Object.values(item)[1])[1].value}>
+                  price={item.value.filter( val => { return val.key == "price" })[0].value}
+                  image={item.value.filter( val => { return val.key == "url" })[0].value}
+                  bought={props.userItems[item.key]}
+                  chosen={item.key == props.chosenItem}
+                  >
                 </Item>          
               </Grid>    
-              ))}
+              ))}   
               {props.section.map((item) =>  (
-                <Grid>
+                <Grid key={item.key}>
                   <Item 
                     key={item.key} 
-                    price={Object.values(Object.values(item)[1])[0].value}
-                    image={Object.values(Object.values(item)[1])[1].value}>
+                    price={item.value.filter( val => { return val.key == "price" })[0].value}
+                    image={item.value.filter( val => { return val.key == "url" })[0].value}
+                    bought={props.userItems[item.key]}
+                    chosen={item.key == props.chosenItem}
+                    >
                   </Item>          
                 </Grid>    
-                ))}     
+                ))}   
         </GridList>  
     </FormControl>    
   );

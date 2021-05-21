@@ -51,9 +51,9 @@ const Shop = () => {
         { game && userInfo && userInfo.frogstage == constants.CONST_FROG_STGES &&
           <Grid>
             <ItemList 
-              section = {game.shop.filter( i => { return i.key == section } )[0].value}>
+              section = {game.shop.filter( i => { return i.key == section } )[0].value}
               userItems = {userInfo.items[section]}
-              chosenItem = {userInfo.chosenItems[section]}
+              chosenItem = {userInfo.chosenItems[section]}>
             </ItemList> 
           </Grid>}
       </Grid>

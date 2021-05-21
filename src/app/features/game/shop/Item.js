@@ -33,7 +33,11 @@ const Items = (props) => {
 
   const buyItem = () => {
     
-  }
+  };
+
+  const choseItem = () => {
+
+  };
 
   return (
     <Card className={classes.root}>
@@ -47,11 +51,21 @@ const Items = (props) => {
       />
     </CardActionArea>
     <CardActions>     
-         
-      <Button className={classes.button} size="large" color="primary" onClick={buyItem()}>
+
+      <Button
+        className={classes.button} 
+        size="large" 
+        color="primary" 
+        onClick={buyItem()}
+        disabled={!!props.bought}>
         Kup {props.price}
       </Button>
-      <Button className={classes.button} size="large" color="primary">
+      <Button 
+        className={classes.button} 
+        size="large" 
+        color="primary"
+        onClick={choseItem()}
+        disabled={!props.bought || props.chosen}>
         Wybierz
       </Button>
     </CardActions>
