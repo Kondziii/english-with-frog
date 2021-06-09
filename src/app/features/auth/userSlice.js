@@ -21,7 +21,25 @@ export const userSlice = createSlice({
     },
     updateFrogstage: (state) => {
       state.info.frogstage = state.info.frogstage + 1;
-    }
+    },
+    updateChosenFrogSkin: (state, action) => {
+      state.info.chosenItems.frogSkin = action.payload;
+    },
+    updateChosenBackground: (state, action) => {
+      state.info.chosenItems.background = action.payload;
+    },
+    updateChosenClothes: (state, action) => {
+      state.info.chosenItems.clothes = action.payload;
+    },
+    updateItemsFrogSkin: (state, action) => {
+      state.info.items.frogSkin[action.payload] = 1;
+    },
+    updateItemsBackground: (state, action) => {
+      state.info.items.background[action.payload] = 1;
+    },
+    updateItemsClothes: (state, action) => {
+      state.info.items.clothes[action.payload] = 1;
+    },
   },
 });
 
@@ -32,6 +50,12 @@ export const {
   getUserGameProgress,
   updateMoneyState,
   updateFrogstage,
+  updateChosenFrogSkin,
+  updateChosenBackground,
+  updateChosenClothes,
+  updateItemsFrogSkin,
+  updateItemsBackground,
+  updateItemsClothes,
 } = userSlice.actions;
 
 export const selectUser = (state) => state.user.user;

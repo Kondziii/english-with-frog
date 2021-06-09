@@ -7,8 +7,10 @@ import {
 } from '@material-ui/core';
 import Item from './Item';
 import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
-import { selectUserInfo} from '../../auth/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
+import { selectGame, fetchFrogStates, setCurrentFrogState } from '../gameSlice';
+import { selectUserInfo } from '../../auth/userSlice';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -20,8 +22,15 @@ const useStyles = makeStyles(() => ({
     height: 150,
     width: 150,
   },
+  gridContainer: {
+    padding: '3vh',
+    height: '75vh'
+  },
   gridList: {
-    paddingLeft: '4vh',
+    height: '75vh'
+  },
+  grid2: {
+    overflow: "auto"
   }
 }));
 
@@ -29,51 +38,30 @@ const ItemsList = (props) => {
   const classes = useStyles();
   const userInfo = useSelector(selectUserInfo);
 
-  const getShopHeight = () => {
-    if ( userInfo.frogstage < 5) {
-      if (isWidthUp('xl', props.width)) {
-        console.log('xl');
-        return 600;
-      }
-      if (isWidthUp('lg', props.width)) {
-        console.log('lg');
-        return 590;
-      }
-      if (isWidthUp('md', props.width)) {
-        console.log('md');
-        return 650;
-      }
-      if (isWidthUp('sm', props.width)) {
-        console.log('sm');
-        return 650;
-      }
-      console.log('<5');
-      return 590;
-    }
-    else {
-        console.log('else');
-        return 850;
-    }
-  };
-
   const getGridListCols = () => {
     if (isWidthUp('xl', props.width)) {
-      return 4;
+      return 3;
     }
     if (isWidthUp('lg', props.width)) {
       return 3;
     }
     if (isWidthUp('md', props.width)) {
-      return 2;
+      return 3;
     }
     if (isWidthUp('sm', props.width)) {
-      return 2;
+      return 3;
     }
-    return 1;
+    return 2;
   };
 
   return (
     <FormControl className={classes.root}>
+      <Grid
+      container
+      justify="center"
+      alignItems="center"
+      className={classes.gridContainer}
+      >
       <GridList           
         cellHeight='auto'
         cols={getGridListCols()}
@@ -82,7 +70,9 @@ const ItemsList = (props) => {
         {props.section.map((item) =>  (
           <Grid key={item.key}>
             <Item 
+              section={props.sectionName}
               key={item.key} 
+              itemKey={item.key}
               price={item.value.filter( val => { return val.key == "price" })[0].value}
               image={item.value.filter( val => { return val.key == "url" })[0].value}
               bought={props.userItems[item.key]}
@@ -90,44 +80,9 @@ const ItemsList = (props) => {
               >
             </Item>          
           </Grid>    
-          ))}   
-          {props.section.map((item) =>  (
-            <Grid key={item.key}>
-              <Item 
-                key={item.key} 
-                price={item.value.filter( val => { return val.key == "price" })[0].value}
-                image={item.value.filter( val => { return val.key == "url" })[0].value}
-                bought={props.userItems[item.key]}
-                chosen={item.key == props.chosenItem}
-                >
-              </Item>          
-            </Grid>    
-            ))}   
-            {props.section.map((item) =>  (
-              <Grid key={item.key}>
-                <Item 
-                  key={item.key} 
-                  price={item.value.filter( val => { return val.key == "price" })[0].value}
-                  image={item.value.filter( val => { return val.key == "url" })[0].value}
-                  bought={props.userItems[item.key]}
-                  chosen={item.key == props.chosenItem}
-                  >
-                </Item>          
-              </Grid>    
-              ))}   
-              {props.section.map((item) =>  (
-                <Grid key={item.key}>
-                  <Item 
-                    key={item.key} 
-                    price={item.value.filter( val => { return val.key == "price" })[0].value}
-                    image={item.value.filter( val => { return val.key == "url" })[0].value}
-                    bought={props.userItems[item.key]}
-                    chosen={item.key == props.chosenItem}
-                    >
-                  </Item>          
-                </Grid>    
-                ))}   
-        </GridList>  
+          ))}
+        </GridList>
+      </Grid>
     </FormControl>    
   );
 };

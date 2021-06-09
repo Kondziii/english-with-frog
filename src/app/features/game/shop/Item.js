@@ -8,8 +8,20 @@ import {
   CardActions,
 } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
 import { selectGame, fetchFrogStates, setCurrentFrogState } from '../gameSlice';
-import { selectUserInfo, selectUser, updateFrogstage, updateMoneyState } from '../../auth/userSlice';
+import { updateMoney, updateItems, updateChosenItems } from '../../db/updateUser';
+import { 
+  selectUserInfo, 
+  selectUser, 
+  updateMoneyState,
+  updateChosenFrogSkin,
+  updateChosenBackground,
+  updateChosenClothes,
+  updateItemsFrogSkin,
+  updateItemsBackground,
+  updateItemsClothes,
+ } from '../../auth/userSlice';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -26,17 +38,52 @@ const useStyles = makeStyles(() => ({
 
 const Items = (props) => {
   const classes = useStyles();
-  const game = useSelector(selectGame);
   const userInfo = useSelector(selectUserInfo);
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
+  const [buyReRender, setBuyReRender] = useState(false);
+  const [chosenReRender, setIsChosenReRender] = useState(false);
+
+  useEffect(() => {
+    dispatch(updateMoneyState(userInfo.money - props.price));
+    updateMoney(user.uid, userInfo.money - props.price);
+    if (props.section == 'frogSkin') {
+      dispatch(updateItemsFrogSkin(props.itemKey));
+      updateItems(user.uid, 'frogSkin', props.itemKey, 1);
+    }
+    else if (props.section == 'background') {
+      dispatch(updateItemsBackground(props.itemKey));
+      updateItems(user.uid, 'background', props.itemKey, 1);
+    }
+    else if (props.section == 'clothes') {
+      dispatch(updateItemsClothes(props.itemKey));
+      updateItems(user.uid, 'clothes', props.itemKey, 1);
+    };
+  }, [buyReRender])
 
   const buyItem = () => {
-    
+    if (userInfo.money >= props.price) {
+      setBuyReRender(!buyReRender);
+    }
   };
 
-  const choseItem = () => {
+  useEffect(() => {
+    if (props.section == 'frogSkin') {
+      dispatch(updateChosenFrogSkin(parseInt(props.itemKey, 10)));
+      updateChosenItems(user.uid, 'frogSkin', parseInt(props.itemKey, 10));
+    }
+    else if (props.section == 'background') {
+      dispatch(updateChosenBackground(parseInt(props.itemKey, 10)));
+      updateChosenItems(user.uid, 'background', parseInt(props.itemKey, 10));
+    }
+    else if (props.section == 'clothes') {
+      updateChosenItems(user.uid, 'clothes', parseInt(props.itemKey, 10));
+      dispatch(updateChosenClothes(parseInt(props.itemKey, 10)));
+    };
+  }, [chosenReRender])
 
+  const choseItem = () => {
+    setIsChosenReRender(!chosenReRender);
   };
 
   return (
@@ -51,12 +98,11 @@ const Items = (props) => {
       />
     </CardActionArea>
     <CardActions>     
-
       <Button
         className={classes.button} 
         size="large" 
         color="primary" 
-        onClick={buyItem()}
+        onClick={()=>buyItem()}
         disabled={!!props.bought}>
         Kup {props.price}
       </Button>
@@ -64,7 +110,7 @@ const Items = (props) => {
         className={classes.button} 
         size="large" 
         color="primary"
-        onClick={choseItem()}
+        onClick={()=>choseItem()}
         disabled={!props.bought || props.chosen}>
         Wybierz
       </Button>

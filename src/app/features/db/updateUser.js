@@ -11,6 +11,10 @@ const updateFrogstageDB = (id, val) => {
     database.ref('/database/users/' + id + '/frogstage').set(val);
 }
 
+const updateChosenItems = (id, itemType, val) => {
+    database.ref('/database/users/' + id + '/chosenItems/' + itemType).set(val);
+}
+
 const updateItems = (id, itemType, item, val) => {
     database.ref('/database/users/' + id + '/items/' + itemType + '/' + item).set(val);
 }
@@ -30,4 +34,4 @@ const upgradeFrogOnce = (id) => {
     .set(firebase.database.ServerValue.increment(1));
 }
 
-export { updateMoney, updateFrogstageDB, updateItems, updateLearning, addMoney, upgradeFrogOnce };
+export { updateMoney, updateFrogstageDB, updateChosenItems, updateItems, updateLearning, addMoney, upgradeFrogOnce };
