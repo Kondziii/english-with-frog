@@ -69,21 +69,26 @@ const Items = (props) => {
 
   useEffect(() => {
     if (props.section == 'frogSkin') {
-      dispatch(updateChosenFrogSkin(parseInt(props.itemKey, 10)));
-      updateChosenItems(user.uid, 'frogSkin', parseInt(props.itemKey, 10));
+      dispatch(updateChosenFrogSkin(props.itemKey, 10));
+      updateChosenItems(user.uid, 'frogSkin', props.itemKey, 10);
     }
     else if (props.section == 'background') {
-      dispatch(updateChosenBackground(parseInt(props.itemKey, 10)));
-      updateChosenItems(user.uid, 'background', parseInt(props.itemKey, 10));
+      dispatch(updateChosenBackground(props.itemKey, 10));
+      updateChosenItems(user.uid, 'background', props.itemKey, 10);
     }
     else if (props.section == 'clothes') {
-      updateChosenItems(user.uid, 'clothes', parseInt(props.itemKey, 10));
-      dispatch(updateChosenClothes(parseInt(props.itemKey, 10)));
+      updateChosenItems(user.uid, 'clothes', props.itemKey, 10);
+      dispatch(updateChosenClothes(props.itemKey, 10));
     };
   }, [chosenReRender])
 
   const choseItem = () => {
     setIsChosenReRender(!chosenReRender);
+  };
+  
+  const choseNoItem = () => {
+    updateChosenItems(user.uid, 'clothes', 0);
+    dispatch(updateChosenClothes(0));
   };
 
   return (
@@ -103,17 +108,38 @@ const Items = (props) => {
         size="large" 
         color="primary" 
         onClick={()=>buyItem()}
-        disabled={!!props.bought}>
+        disabled={props.bought}>
         Kup {props.price}
       </Button>
-      <Button 
-        className={classes.button} 
-        size="large" 
-        color="primary"
-        onClick={()=>choseItem()}
-        disabled={!props.bought || props.chosen}>
-        Wybierz
-      </Button>
+      { props.section != 'clothes' &&
+        <Button 
+          className={classes.button} 
+          size="large" 
+          color="primary"
+          onClick={()=>choseItem()}
+          disabled={!props.bought || props.chosen}>
+          Wybierz
+        </Button>
+      }
+      { props.section == 'clothes' && !props.chosen && props.bought &&
+        <Button 
+          className={classes.button} 
+          size="large" 
+          color="primary"
+          onClick={()=>choseItem()}
+          disabled={!props.bought || props.chosen}>
+          Wybierz
+        </Button>
+      }
+      { props.section == 'clothes' && props.chosen && props.bought &&
+        <Button 
+          className={classes.button} 
+          size="large" 
+          color="primary"
+          onClick={()=>choseNoItem()}>
+          Anuluj
+        </Button>
+      }
     </CardActions>
   </Card>  
   );

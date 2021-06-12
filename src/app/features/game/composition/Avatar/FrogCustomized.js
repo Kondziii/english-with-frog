@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Card, Paper, Grid } from '@material-ui/core';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -9,6 +9,17 @@ import { useSelector } from 'react-redux';
 import { selectGame, } from '../../gameSlice';
 import { selectUserInfo, selectUser } from '../../../auth/userSlice';
 import { useState } from 'react';
+
+import mergeImages from 'merge-images';
+
+import fs1 from '../../../../../assets/images/frogSkin/1.png';
+import fs2 from '../../../../../assets/images/frogSkin/2.png';
+
+import b1 from '../../../../../assets/images/background/1.png';
+import b2 from '../../../../../assets/images/background/2.png';
+
+import c1 from '../../../../../assets/images/clothes/1.png';
+import c2 from '../../../../../assets/images/clothes/2.png';
 
 const useStyles = makeStyles({
   root: {
@@ -30,23 +41,51 @@ const FrogCustomized = () => {
   const userInfo = useSelector(selectUserInfo);
   const user = useSelector(selectUser);
 
-  // wybrane żaba, tło i ciuch
+  const [src, setSrc] = useState( null )
 
-  // game.shop.filter( (i) => 
-  // { return i.key == 'frogSkin' } )[0].value.filter( (j) =>
-  //   { return j.key == userInfo.chosenItems.frogSkin }
-  // )[0].value[1].value
+  const possibleFrogSkin = [fs1, fs2];
+  const possibleBackground = [b1, b2];
+  const possibleClothes = [c1, c2];
 
-  // game.shop.filter( (i) => 
-  //   { return i.key == 'background' } )[0].value.filter( (j) =>
-  //     { return j.key == userInfo.chosenItems.background }
-  //   )[0].value[1].value
+  useEffect( () => {
+    const chosenFS = game.shop.filter( (i) => 
+      { return i.key == 'frogSkin' } )[0].value.filter( (j) =>
+        { return j.key == userInfo.chosenItems.frogSkin }
+      )[0].value;
+    const chosenB = game.shop.filter( (i) => 
+      { return i.key == 'background' } )[0].value.filter( (j) =>
+        { return j.key == userInfo.chosenItems.background }
+      )[0].value;
 
-  // game.shop.filter( (i) => 
-  //   { return i.key == 'clothes' } )[0].value.filter( (j) =>
-  //     { return j.key == userInfo.chosenItems.clothes }
-  //   )[0].value[1].value
-  
+    if (userInfo.chosenItems.clothes) {
+      const chosenC = game.shop.filter( (i) => 
+        { return i.key == 'clothes' } )[0].value.filter( (j) =>
+          { return j.key == userInfo.chosenItems.clothes }
+        )[0].value;
+
+      mergeImages([
+        { src: possibleBackground[userInfo.chosenItems.background-1], x: chosenB[2].value, y: chosenB[3].value },
+        { src: possibleFrogSkin[userInfo.chosenItems.frogSkin-1], x: chosenFS[2].value, y: chosenFS[3].value },
+        { src: possibleClothes[userInfo.chosenItems.clothes-1], x: chosenC[2].value, y: chosenC[3].value }
+      ])
+        .then(src => { setSrc(src) })      
+    } else {
+      mergeImages([
+        { src: possibleBackground[userInfo.chosenItems.background-1], x: chosenB[2].value, y: chosenB[3].value },
+        { src: possibleFrogSkin[userInfo.chosenItems.frogSkin-1], x: chosenFS[2].value, y: chosenFS[3].value }
+      ])
+        .then(src => { setSrc(src) })      
+    }
+
+  }, [userInfo.chosenItems.frogSkin, 
+    userInfo.chosenItems.background, 
+    userInfo.chosenItems.clothes]);
+
+  // return (
+  //   <div>
+  //     <img src={src} style={{ width: 500 }} alt="avatar.png" />
+  //   </div>
+  // );
 
   return (
     <Card className={classes.root}>
@@ -56,12 +95,7 @@ const FrogCustomized = () => {
           component="img"
           alt="Contemplative Reptile"
           height="fixed"
-          image={
-            game.shop.filter( (i) => 
-              { return i.key == 'frogSkin' } )[0].value.filter( (j) =>
-                { return j.key == userInfo.chosenItems.frogSkin }
-              )[0].value[1].value
-          }
+          image={src}
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
