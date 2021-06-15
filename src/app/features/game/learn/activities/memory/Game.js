@@ -24,7 +24,9 @@ import {
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        flexGrow: 1,
+        width: '100%',
+        position: 'relative',
+        height: '87hv'
     },
     title: {
         textAlign: 'center',
@@ -37,9 +39,9 @@ const useStyles = makeStyles((theme) => ({
     card : {
         // width: '10vw',
         // height: '15vh',
-        width: '160px',
-        height: '120px',
-        border: '2px solid white',     
+        width: '150px',
+        height: '100px',
+        // border: '2px solid white',     
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -52,6 +54,8 @@ const useStyles = makeStyles((theme) => ({
     blank: {
         fontSize:0,
         background: 'green',
+        // boxShadow: "none",
+        // border: "none",
     },
     matched : {
         fontSize:20,
@@ -67,7 +71,11 @@ const useStyles = makeStyles((theme) => ({
     gridList: {
         justifyContent: 'center',
         display: 'flex',
+        height: '60vh',
     },
+    gridContainer: {
+        padding: '3vh',
+    }
   }));
 
 const Game = (props) => {
@@ -114,12 +122,12 @@ const Game = (props) => {
           return 4;
         }
         if (isWidthUp('md', props.width)) {
-          return 4;
+          return 3;
         }
         if (isWidthUp('sm', props.width)) {
           return 3;
         }
-        return 3;
+        return 2;
       };
     
       const getCellHeight = () => {
@@ -196,20 +204,37 @@ const Game = (props) => {
                     <Typography className={classes.title_text} variant="h5">Zdobyte Punkty : {points}</Typography>
                 }   
                 </Paper>
-                <GridList cellHeight={getCellHeight} className={classes.gridList} cols={getGridListCols()}>
-                    {props.array.map((value) =>  (
-                        <GridListTile key={value} cols={1} className={classes.container}>
-                            <Card>
-                                <CardContent>
-                                    <Typography key={value} value={value} className={`${classes.card} ${classes.blank}`} 
-                                    onClick={clickHandler} clicked="False">
-                                        {value}
-                                    </Typography>
-                                </CardContent>
-                            </Card>
-                        </GridListTile>
-                    ))}
-                </GridList>
+                <Grid 
+                container
+                justify="center"
+                alignItems="center"
+                className={classes.gridContainer}>
+                    <GridList 
+                    cellHeight={getCellHeight} 
+                    className={classes.gridList} 
+                    cols={getGridListCols()}>
+                        {props.array.map((value) =>  (
+                            <GridListTile 
+                            key={value} 
+                            cols={1} 
+                            className={classes.container}>
+                                <Card>
+                                    <CardContent>
+                                        <Typography 
+                                        key={value} 
+                                        value={value} 
+                                        className={`${classes.card} ${classes.blank}`} 
+                                        onClick={clickHandler} 
+                                        clicked="False">
+                                            {value}
+                                        </Typography>
+                                    </CardContent>
+                                </Card>
+                            </GridListTile>
+                        ))}
+                    </GridList>                    
+                </Grid>
+
             </div>    
             <Button className={classes.buttonStyleBack} onClick={backToMenuHandler}>
                 <ArrowLeftIcon />
