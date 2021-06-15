@@ -13,7 +13,7 @@ const useStyles = makeStyles({
   root: {
     display: 'flex',
     padding: 'auto',
-    minHeight: '90vh',
+    minHeight: '87vh',
   },
   media: {
     height: '500px',

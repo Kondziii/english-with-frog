@@ -24,7 +24,7 @@ import c2 from '../../../../../assets/images/clothes/2.png';
 const useStyles = makeStyles({
   root: {
     display: 'flex',
-    height: '90vh',
+    height: '87vh',
     maxWidth: '300',
     padding: '5vh',
   },
