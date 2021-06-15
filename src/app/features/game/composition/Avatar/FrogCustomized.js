@@ -81,11 +81,6 @@ const FrogCustomized = () => {
     userInfo.chosenItems.background, 
     userInfo.chosenItems.clothes]);
 
-  // return (
-  //   <div>
-  //     <img src={src} style={{ width: 500 }} alt="avatar.png" />
-  //   </div>
-  // );
 
   return (
     <Card className={classes.root}>

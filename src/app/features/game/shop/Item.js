@@ -108,7 +108,7 @@ const Items = (props) => {
         size="large" 
         color="primary" 
         onClick={()=>buyItem()}
-        disabled={props.bought}>
+        disabled={!!props.bought}>
         Kup {props.price}
       </Button>
       { props.section != 'clothes' &&
@@ -117,7 +117,7 @@ const Items = (props) => {
           size="large" 
           color="primary"
           onClick={()=>choseItem()}
-          disabled={!props.bought || props.chosen}>
+          disabled={!props.bought || !!props.chosen}>
           Wybierz
         </Button>
       }
@@ -127,7 +127,7 @@ const Items = (props) => {
           size="large" 
           color="primary"
           onClick={()=>choseItem()}
-          disabled={!props.bought || props.chosen}>
+          disabled={!props.bought || !!props.chosen}>
           Wybierz
         </Button>
       }
