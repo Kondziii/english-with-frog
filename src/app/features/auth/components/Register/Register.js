@@ -15,6 +15,7 @@ import { useState } from 'react';
 import { auth } from '../../../../firebase';
 import { useDispatch } from 'react-redux';
 import { login } from '../../userSlice';
+import { createUser } from '../../../db/createUser';
 
 const Register = () => {
   const classes = useStyles();
@@ -74,6 +75,7 @@ const Register = () => {
                   displayName: nickname,
                 })
               );
+              createUser(userAuth.user.uid);
             });
         })
         .catch((err) => {
